@@ -1,0 +1,87 @@
+from app.models import db, Product, environment, SCHEMA
+from sqlalchemy.sql import text
+
+def seed_products():
+  products=[
+    Product(user_id=1,
+            name="Stylish Jacket",
+            price=499.99,
+            description="Fashionable and warm for winter.Compact Drap Coat With Floral Embroidery",
+            category="Clothing",
+            return_accepted=True),
+    Product(user_id=1,
+      name="Designer Jeans",
+      price=89.99,
+      description="Comfortable and trendy.Straight Ankle jeans are designed with a mid-rise and a zip fly. Crafted of Japanese cotton denim, this pair features hand-sanding and grinding details and is complete with tonal floral embroidery.",
+      category="Clothing",
+      return_accepted=True),
+    Product(user_id=1,
+            name="Graphic T-Shirt",
+            price=39.99,
+            description="Harmony between different influences distinguishes the design of this shirt that blends sporty inspiration, retro lines, and feminine details. A play of duality and transparencies emerges in this short-sleeve shirt with unique style, defined by the bowling collar and embellished with delicate floral embroidery.",
+            category="Clothing",
+            return_accepted=True),
+    Product(user_id=1,
+            name="Summer Dress",
+            price=59.99,
+            description="Light and breezy, perfect for summer days.This dress features bold printed poppies and a full circle skirt.",
+            category="Clothing",
+            return_accepted=True),
+    Product(user_id=2,
+            name="Elegant Necklace",
+            price=199.99,
+            description="Embellished with sparkling diamonds, this chain necklace is crafted from polished gold with an intricate flower pendant,perfect for evening wear.",
+            category="Jewelry",
+            return_accepted=False),
+    Product(user_id=2,
+            name="Charming Bracelet",
+            price=150.00,
+            description="Ippolita's Summer Rainbow bracelet is detailed with mixed faceted gemstones, each shape bezel-set in yellow gold.",
+            category="Jewelry",
+            return_accepted=False),
+    Product(user_id=3,
+            name="Decorative Vase",
+            price=45.99,
+            description="Give your home a charming makeover with this fine bone china vase that boasts of minimalist details.",
+            category="Home & Living",
+            return_accepted=True),
+    Product(user_id=3,
+            name="Modern Dining Table",
+            price=299.99,
+            description="The countertop of dining table is designed in a flattening oval shape, a cross between an oblong and an oval shape, as per the experts. The delicate, circular contours of the wooden frame provide a stunning contrast with the natural hue of the wall, making it seem rich.",
+            category="Home & Living",
+            return_accepted=True),
+    Product(user_id=3,
+            name="Luxury Throw Pillow",
+            price=45.99,
+            description="made with White Linen, Black Velvet Appliqué, and Antique Gold Embroidery, adds a touch of luxury to any room.",
+            category="Home & Living",
+            return_accepted=True),
+    Product(user_id=4,
+      name="Hummingbird stained glass window hangings",
+      price=69.99,
+      description="If you are looking for an exquisite item of home decoration, this stained glass window hanging of hummingbirds will definitely appeal to you! Except for that, hummingbirds are known to be the symbols of happiness and joy!That is why, this bird suncatcher would make a meaningful gift for your closest people!‼️ Please, note: this item is handcrafted - glass could slightly differ.",
+      category="Craft Supplies",
+      return_accepted=True),
+    Product(user_id=4,
+            name="Scrapbook Bundle",
+            price=20.99,
+            description="64 pieces per pack, comes in a zip lock bag measuring 32cm x 23cm - Excellent as a gift or for someone who enjoys scrapbooking, journaling or anything Crafty!",
+            category="Craft Supplies",
+            return_accepted=True),
+    Product(user_id=4,
+            name="Custom Image Stencils",
+            price=10.99,
+            description="Reusable stencils for creative designs.",
+            category="Craft Supplies",
+            return_accepted=True)
+    ]
+  db.session.add_all(products)
+  db.session.commit()
+
+def undo_products():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.products RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute(text("DELETE FROM products"))
+    db.session.commit()
