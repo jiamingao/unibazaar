@@ -19,7 +19,7 @@ class Product(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = db.relationship('User', back_populates='products')
-    
+
     product_images = db.relationship('ProductImage', back_populates='product')
     reviews = db.relationship('Review', back_populates='product')
 

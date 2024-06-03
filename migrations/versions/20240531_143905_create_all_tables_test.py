@@ -31,7 +31,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('productImages',
+    op.create_table('product_images',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('image_url', sa.String(length=1024), nullable=False),
@@ -66,6 +66,6 @@ def downgrade():
         batch_op.drop_column('firstname')
 
     op.drop_table('reviews')
-    op.drop_table('productImages')
+    op.drop_table('product_images')
     op.drop_table('products')
     # ### end Alembic commands ###
