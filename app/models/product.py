@@ -20,9 +20,8 @@ class Product(db.Model):
 
     user = db.relationship('User', back_populates='products')
 
-    product_images = db.relationship('ProductImage', back_populates='product')
-    reviews = db.relationship('Review', back_populates='product')
-
+    product_images = db.relationship('ProductImage', back_populates='product',cascade='all, delete-orphan')
+    reviews = db.relationship('Review', back_populates='product',cascade='all, delete-orphan')
 
 
     def to_dict(self):
