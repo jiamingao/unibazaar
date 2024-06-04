@@ -124,3 +124,23 @@ def get_reviews_by_product(productId):
     review_dict = review.to_dict()
     answer_dict[review_dict["id"]]=review_dict
    return answer_dict
+
+
+#create a review
+@product_routes.route('/<int:productId>/reviews/new', methods=["POST"])
+def create_a_review(productId):
+   form = CreateReviewForm()
+   form['csrf_token'].data = request.cookies['csrf_token']
+   if form.validate_on_submit():
+      new_review = Review(
+         user_id = current_user.id,
+         product_id = productId,
+         review = form.data["review"],
+         rating = form.data["rating"]
+      )
+      db.session.add(new_review)
+      db.session.commit()
+      return new_review.to_dict()
+   else:
+      return jsonify({"error": "Invalid form data"}), 400
+
