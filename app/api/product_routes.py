@@ -3,6 +3,7 @@ from app.models import db, Product, ProductImage, Review
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
 from app.forms.product_create import CreateProductForm
+from app.forms.review_create import CreateReviewForm
 
 product_routes = Blueprint('products', __name__)
 
@@ -112,3 +113,14 @@ def delete_product(productId):
    db.session.delete(product_to_delete)
    db.session.commit()
    return jsonify({"message": "Product successfully deleted"}), 200
+
+
+#get all reviews by productId
+@product_routes.route('/<int:productId>/reviews')
+def get_reviews_by_product(productId):
+   reviews = Review.query.filter_by(product_id = productId).all()
+   answer_dict={}
+   for review in reviews:
+    review_dict = review.to_dict()
+    answer_dict[review_dict["id"]]=review_dict
+   return answer_dict
