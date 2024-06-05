@@ -1,16 +1,22 @@
-//action
+//actions
 const LOAD_ALL_PRODUCTS = "products/LOAD_PRODUCTS";
+const CREATE_PRODUCT = "products/CREATE_PRODUCT";
 
-//action creator
+//action creators
 const getAllProducts = (products)=>({
   type: LOAD_ALL_PRODUCTS,
   payload: products
-})
+});
+
+const createProduct = (product)=>({
+  type: CREATE_PRODUCT,
+  payload: product
+});
 
 
-//thunk
+//thunks
 export const getAllProductsThunk=()=>async(dispatch)=>{
-  const res = await fetch("api/products/all");
+  const res = await fetch("/api/products/all");
 
   if(res.ok){
     const data = await res.json();
@@ -23,10 +29,26 @@ export const getAllProductsThunk=()=>async(dispatch)=>{
   }
 }
 
+export const createProductThunk=(product)=>async(dispatch)=>{
+  const res = await fetch("/api/products/new",{
+    method: "POST",
+    body: product,
+  })
 
-//reducer
+  if(res.ok){
+    const data = await res.json();
+    dispatch(createProduct(data))
+    return data
+  }else{
+    const errors= await res.json();
+    return {errors}
+  }
+}
+
+//reducers
 const initialState ={
-  allProducts:{}
+  allProducts:{},
+  myProducts:{}
 }
 
 function productReducer(state=initialState, action){
@@ -35,6 +57,18 @@ function productReducer(state=initialState, action){
     case LOAD_ALL_PRODUCTS:{
       newState = { ...state, allProducts: action.payload};
       return newState;
+    }
+    case CREATE_PRODUCT:{
+      newState = {...state};
+      newState.allProducts={
+        ...newState.allProducts,
+        [action.payload.id]:{...action.payload}
+      };
+      newState.myProducts={
+        ...newState.myProducts,
+        [action.payload.id]:{...action.payload}
+      }
+      return newState
     }
     default:
       return state;

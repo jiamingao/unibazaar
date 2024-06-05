@@ -73,7 +73,7 @@ def create_new_product():
       # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", product)
       product_dict = product.to_dict()
       product_dict['images'] = [image.to_dict() for image in product.product_images]
-      return jsonify(product_dict)
+      return product_dict
     else:
        return jsonify({"error": "Invalid form data"}), 400
 
@@ -143,4 +143,3 @@ def create_a_review(productId):
       return new_review.to_dict()
    else:
       return jsonify({"error": "Invalid form data"}), 400
-
