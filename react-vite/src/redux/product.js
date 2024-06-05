@@ -35,10 +35,6 @@ function productReducer(state=initialState, action){
     case LOAD_ALL_PRODUCTS:{
       newState = { ...state, allProducts: action.payload};
       return newState;
-      // action.payload.forEach((product)=>{
-      //   allProducts[product.id]=product
-      // })
-      // return {...state, allProducts}
     }
     default:
       return state;
