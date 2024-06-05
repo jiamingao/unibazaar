@@ -13,8 +13,8 @@ const CreateProduct=()=>{
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [return_accepted, setReturnAccepted] = useState(false)
-  const [image_url, setImageUrl] = useState('')
-  // const [error, setError] = useState({})
+  const [image_url, setImageUrl] = useState(null)
+  const [error, setError] = useState({})
 
   const currUser = useSelector(state=>state.session.user)
 
@@ -33,7 +33,7 @@ const CreateProduct=()=>{
     formData.append('return_accepted', return_accepted)
     formData.append('image_url', image_url)
 
-    console.log(Array.from(formData))
+    // console.log(Array.from(formData))
 
     try{
       const product = await dispatch(createProductThunk(formData))
@@ -46,6 +46,16 @@ const CreateProduct=()=>{
     }
 
   }
+
+  useEffect(() => {
+    const errorObj = {}
+
+    if(!name.length) errorObj.name = "Name is Required"
+    if(!price.length) errorObj.price = "Price is Required"
+    if(!description.length) errorObj.description = "Description is Required"
+    setError(errorObj)
+
+}, [name,price,description])
 
   return(
     <div className='create-product-container'>
@@ -62,6 +72,9 @@ const CreateProduct=()=>{
               onChange={(e) => setName(e.target.value)}
               />
             </div>
+            <div className="error-container">
+              {error.name && <p className='error-msg'>{error.name}</p>}
+            </div>
 
             <div className='cp-price'>
             <label className='cp-label'>Price:</label>
@@ -71,6 +84,9 @@ const CreateProduct=()=>{
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               />
+            </div>
+            <div className="error-container">
+              {error.price && <p className='error-msg'>{error.price}</p>}
             </div>
 
             <div className='cp-description'>
@@ -83,6 +99,9 @@ const CreateProduct=()=>{
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Please write at least 30 characters"
               />
+            </div>
+            <div className="error-container">
+              {error.description && <p className='error-msg'>{error.description}</p>}
             </div>
 
             <div className='cp-category'>
@@ -113,19 +132,17 @@ const CreateProduct=()=>{
             </div>
 
             <div className='cp-image'>
-            <label className='cp-label'>Image Url:</label>
+            <label className='cp-label'>Image:</label>
             <input
-                type="text"
-                id="image_url"
+                type="file"
                 name="image_url"
                 required
-                value={image_url}
-                onChange={(e) => setImageUrl(e.target.value)}
+                onChange={(e) => setImageUrl(e.target.files[0])}
             />
             </div>
 
           <div className='cp-submit'>
-          <button type="submit" className='cp-submit-btn'>Submit</button>
+          <button type="submit" disabled={Object.values(error).length > 0} className='cp-submit-btn'>Submit</button>
           </div>
       </div>
       </form>

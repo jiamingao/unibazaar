@@ -4,6 +4,8 @@ from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
 from app.forms.product_create import CreateProductForm
 from app.forms.review_create import CreateReviewForm
+from app.api.aws_helpers import upload_file_to_s3, remove_file_from_s3, get_unique_filename
+
 
 product_routes = Blueprint('products', __name__)
 
@@ -60,9 +62,15 @@ def create_new_product():
       db.session.add(new_product)
       db.session.commit()
 
+      image = form.data["image_url"]
+      image.filename = get_unique_filename(image.filename)
+      upload = upload_file_to_s3(image)
+
+      print(upload)
+
       new_image=ProductImage(
           product_id = new_product.id,
-          image_url = form.data["image_url"],
+          image_url = upload["url"],
           main_image= True
       )
 
