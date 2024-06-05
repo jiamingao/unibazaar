@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,SelectField,BooleanField, FloatField
 from wtforms.validators import DataRequired
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+# from app.routes.aws_helpers import ALLOWED_EXTENSIONS
+from app.api.aws_helpers import ALLOWED_EXTENSIONS
 
 
 class CreateProductForm(FlaskForm):
@@ -9,5 +12,6 @@ class CreateProductForm(FlaskForm):
   description = StringField('Description', validators=[DataRequired()])
   category = SelectField("Category", choices=[("Clothing", "Clothing"),("Jewelry", "Jewelry"),("Home & Living", "Home & Living"),("Craft Supplies", "Craft Supplies")])
   return_accepted = BooleanField("Is refundable")
-  image_url = StringField("Product Image", validators=[DataRequired()])
+  # image_url = StringField("Product Image", validators=[DataRequired()])
+  image_url = FileField("Product Image", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
   submit= SubmitField("Submit")
