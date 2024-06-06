@@ -1,6 +1,8 @@
 //actions
 const LOAD_ALL_PRODUCTS = "products/LOAD_PRODUCTS";
 const CREATE_PRODUCT = "products/CREATE_PRODUCT";
+const LOAD_PRODUCTS_BY_USER = "products/LOAD_PRODUCTS_BY_USER";
+const DELETE_PRODUCT = "products/DELETE_PRODUCT";
 
 //action creators
 const getAllProducts = (products)=>({
@@ -13,6 +15,15 @@ const createProduct = (product)=>({
   payload: product
 });
 
+const getProductsByUser = (products)=>({
+  type: LOAD_PRODUCTS_BY_USER,
+  payload: products
+})
+
+const deleteProduct=(productId)=>({
+  type: DELETE_PRODUCT,
+  payload: productId
+})
 
 //thunks
 export const getAllProductsThunk=()=>async(dispatch)=>{
@@ -45,6 +56,37 @@ export const createProductThunk=(product)=>async(dispatch)=>{
   }
 }
 
+export const getProductsByUserThunk=()=>async(dispatch)=>{
+  const res = await fetch("/api/products/current");
+
+  if(res.ok){
+    const data = await res.json();
+    dispatch(getProductsByUser(data))
+    return data
+  }else{
+    const errors= await res.json();
+    return {errors}
+  }
+
+}
+
+export const deleteProductThunk=(productId)=>async(dispatch)=>{
+  const res = await fetch(`/api/products/${productId}/delete`,{
+    method: "DELETE",
+  })
+
+  if(res.ok){
+    const data = await res.json();
+    dispatch(deleteProduct(productId))
+    return data
+  }else{
+    const errors= await res.json();
+    return {errors}
+  }
+
+
+}
+
 //reducers
 const initialState ={
   allProducts:{},
@@ -69,6 +111,17 @@ function productReducer(state=initialState, action){
         [action.payload.id]:{...action.payload}
       }
       return newState
+    }
+    case LOAD_PRODUCTS_BY_USER:{
+      newState = {...state, myProducts: action.payload};
+      return newState;
+    }
+    case DELETE_PRODUCT:{
+      newState = {...state};
+      delete newState.allProducts[action.payload];
+      delete newState.myProducts[action.payload];
+      return newState
+
     }
     default:
       return state;

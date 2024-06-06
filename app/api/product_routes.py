@@ -66,7 +66,7 @@ def create_new_product():
       image.filename = get_unique_filename(image.filename)
       upload = upload_file_to_s3(image)
 
-      print(upload)
+      # print(upload)
 
       new_image=ProductImage(
           product_id = new_product.id,
@@ -101,14 +101,19 @@ def update_product(productId):
      product_to_update.description = form.data["description"]
      product_to_update.category = form.data["category"]
      product_to_update.return_accepted = form.data["return_accepted"]
+
+     image_file = form.data["image_url"]
+     image_file.filename = get_unique_filename(image_file.filename)
+     upload = upload_file_to_s3(image_file)
+
      main_image = next((img for img in product_to_update.product_images if img.main_image), None)
      if main_image:
-        main_image.image_url = form.data['image_url']
+        main_image.image_url = upload["url"]
 
      db.session.commit()
      product_dict = product_to_update.to_dict()
      product_dict['images'] = [image.to_dict() for image in product_to_update.product_images]
-     return jsonify(product_dict)
+     return product_dict
   else:
      return jsonify({"error": "Invalid form data"}), 400
 
@@ -120,7 +125,8 @@ def delete_product(productId):
       return jsonify({"error": "Product not found"}),404
    db.session.delete(product_to_delete)
    db.session.commit()
-   return jsonify({"message": "Product successfully deleted"}), 200
+   # return jsonify({"message": "Product successfully deleted"}), 200
+   return product_to_delete.to_dict()
 
 
 #get all reviews by productId

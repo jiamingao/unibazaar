@@ -109,7 +109,6 @@ const CreateProduct=()=>{
             <select
                 id="category"
                 name="category"
-                required
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
             >
