@@ -86,7 +86,7 @@ def create_new_product():
        return jsonify({"error": "Invalid form data"}), 400
 
 #update a product
-@product_routes.route('/<int:productId>/edit', methods=["POST"])
+@product_routes.route('/<int:productId>/edit', methods=["PUT"])
 def update_product(productId):
   product_to_update = Product.query.get(productId)
   if not product_to_update:

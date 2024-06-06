@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getProductsByUserThunk } from '../../redux/product';
 import { NavLink } from "react-router-dom";
 import DeleteProduct from "../DeleteProduct/DeleteProduct";
+import UpdateProduct from "../UpdateProduct/UpdateProduct";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import OpenFSModalButton from '../OpenFSModalButton/OpenFSModalButton'
 import './ManageProduct.css'
 
 const ManageProduct=()=>{
@@ -48,6 +50,13 @@ const ManageProduct=()=>{
             buttonText={"Delete"}
             className='delete-btn'
             modalComponent={<DeleteProduct product={product} setProductPosted={setProductPosted} />}
+            />
+            </div>
+            <div className="update">
+            <OpenFSModalButton
+            buttonText={"Update"}
+            className='update-btn'
+            modalComponent={<UpdateProduct product={product} setProductPosted={setProductPosted} />}
             />
             </div>
           </div>

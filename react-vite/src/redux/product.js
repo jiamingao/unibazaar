@@ -3,6 +3,7 @@ const LOAD_ALL_PRODUCTS = "products/LOAD_PRODUCTS";
 const CREATE_PRODUCT = "products/CREATE_PRODUCT";
 const LOAD_PRODUCTS_BY_USER = "products/LOAD_PRODUCTS_BY_USER";
 const DELETE_PRODUCT = "products/DELETE_PRODUCT";
+const UPDATE_PRODUCT = "products/UPDATE_PRODUCT";
 
 //action creators
 const getAllProducts = (products)=>({
@@ -23,6 +24,11 @@ const getProductsByUser = (products)=>({
 const deleteProduct=(productId)=>({
   type: DELETE_PRODUCT,
   payload: productId
+})
+
+const updateProduct=(product)=>({
+  type: UPDATE_PRODUCT,
+  payload: product
 })
 
 //thunks
@@ -87,6 +93,23 @@ export const deleteProductThunk=(productId)=>async(dispatch)=>{
 
 }
 
+export const updateProductThunk=(product,productId)=>async(dispatch)=>{
+  const res = await fetch(`/api/products/${productId}/edit`,{
+    method: "PUT",
+    body: product,
+  })
+
+  if(res.ok){
+    const data = await res.json();
+    dispatch(updateProduct(data))
+    return data
+  }else{
+    const errors= await res.json();
+    return {errors}
+  }
+
+}
+
 //reducers
 const initialState ={
   allProducts:{},
@@ -122,6 +145,12 @@ function productReducer(state=initialState, action){
       delete newState.myProducts[action.payload];
       return newState
 
+    }
+    case UPDATE_PRODUCT:{
+      newState = {...state};
+      newState.allProducts[action.payload.id]=action.payload;
+      newState.myProducts[action.payload.id]=action.payload;
+      return newState
     }
     default:
       return state;
