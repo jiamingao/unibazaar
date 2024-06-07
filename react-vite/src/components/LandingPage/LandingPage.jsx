@@ -11,7 +11,8 @@ function LandingPage(){
   let productsObj = useSelector((state)=>state.products.allProducts)
   // console.log("~~~~~~~~~~~~~~~~~productObj", productsObj)
 
-  const productsArr = Object.values(productsObj)
+  // const productsArr = Object.values(productsObj)
+  const productsArr = productsObj ? Object.values(productsObj) : [];
   //  console.log("~~~~~~~~~~~~~~~~~productArr", productsArr)
 
   useEffect(()=>{

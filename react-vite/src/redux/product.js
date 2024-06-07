@@ -5,6 +5,7 @@ const LOAD_PRODUCTS_BY_USER = "products/LOAD_PRODUCTS_BY_USER";
 const DELETE_PRODUCT = "products/DELETE_PRODUCT";
 const UPDATE_PRODUCT = "products/UPDATE_PRODUCT";
 
+
 //action creators
 const getAllProducts = (products)=>({
   type: LOAD_ALL_PRODUCTS,
@@ -31,6 +32,8 @@ const updateProduct=(product)=>({
   payload: product
 })
 
+
+
 //thunks
 export const getAllProductsThunk=()=>async(dispatch)=>{
   const res = await fetch("/api/products/all");
@@ -45,6 +48,7 @@ export const getAllProductsThunk=()=>async(dispatch)=>{
     return {errors}
   }
 }
+
 
 export const createProductThunk=(product)=>async(dispatch)=>{
   const res = await fetch("/api/products/new",{

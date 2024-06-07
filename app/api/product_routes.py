@@ -1,5 +1,5 @@
 from flask import Blueprint, request,jsonify
-from app.models import db, Product, ProductImage, Review
+from app.models import db, Product, ProductImage, Review, User
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
 from app.forms.product_create import CreateProductForm
@@ -17,6 +17,7 @@ def get_all_products():
     for product in products:
         product_dict = product.to_dict()
         product_dict['main_image'] = [image.to_dict() for image in product.product_images if image.main_image]
+        product_dict['images'] = [image.to_dict() for image in product.product_images]
         answer_dict[product_dict["id"]]=product_dict
     return answer_dict
 
@@ -26,9 +27,7 @@ def get_all_products():
 def get_product_detail(productId):
     product = Product.query.get(productId)
     product_dict = product.to_dict()
-    # product_dict['reviews'] = [review.to_dict() for review in product.reviews]
     product_dict['images'] = [image.to_dict() for image in product.product_images]
-
     return product_dict
 
 #get all products of current user
@@ -133,11 +132,27 @@ def delete_product(productId):
 @product_routes.route('/<int:productId>/reviews')
 def get_reviews_by_product(productId):
    reviews = Review.query.filter_by(product_id = productId).all()
-   answer_dict={}
+   if not reviews:
+        return {}, 200
+
+   total_rating = 0
+   answer_dict = {
+        'reviews': {},
+        'poster':{}
+    }
+
    for review in reviews:
-    review_dict = review.to_dict()
-    answer_dict[review_dict["id"]]=review_dict
-   return answer_dict
+      poster = User.query.get(review.user_id)
+      poster_dict = poster.to_dict()
+      review_dict = review.to_dict()
+      review_dict['poster']=poster_dict
+      answer_dict['reviews'][review_dict["id"]] = review_dict
+      total_rating += review_dict['rating']
+      average_rating = total_rating / len(reviews)
+      answer_dict['average_rating'] = average_rating
+
+   return answer_dict, 200
+
 
 
 #create a review
