@@ -16,6 +16,8 @@ const UpdateProduct = ({product, setProductPosted})=>{
   const [return_accepted, setReturnAccepted] = useState(product?.return_accepted||false)
   const [image_url, setImageUrl] = useState(product?.main_image[0].image_url ||null)
   const [error, setError] = useState({})
+  const [showImage, setShowImage] = useState();
+  const [imageLoading, setImageLoading] = useState(false);
 
   const currUser = useSelector(state=>state.session.user)
 
@@ -30,12 +32,25 @@ const UpdateProduct = ({product, setProductPosted})=>{
       setDescription(product.description ||'')
       setCategory(product.category || '')
       setReturnAccepted(product.return_accepted || false)
-      setImageUrl(product.main_image[0].image_url || null)
+      setShowImage(product.main_image[0].image_url || null)
     }
   },[product])
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImageUrl(file);
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setShowImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
   const handleSubmit=async(e)=>{
     e.preventDefault();
+    setImageLoading(true)
     const formData = new FormData()
 
     formData.append('name', name)
@@ -53,9 +68,9 @@ const UpdateProduct = ({product, setProductPosted})=>{
         closeModal();
       })
       // console.log(product.id)
-      //change it to product detail later
       await dispatch(getAllProductsThunk())
-      navigate(`/`)
+      navigate(`/products/${product.id}`)
+      setImageLoading(false)
     }catch(error){
       console.error("creating product error:", error);
     }
@@ -68,10 +83,10 @@ const UpdateProduct = ({product, setProductPosted})=>{
     if(!name.length) errorObj.name = "Name is Required"
     if(!price.length) errorObj.price = "Price is Required"
     if(!description.length) errorObj.description = "Description is Required"
-    if(!image_url.length) errorObj.description = "Image is Required"
+    if(!image_url) errorObj.description = "Image is Required"
     setError(errorObj)
 
-}, [name,price,description])
+}, [name,price,description, image_url])
 
   return(
     <div className='update-product-container'>
@@ -151,9 +166,9 @@ const UpdateProduct = ({product, setProductPosted})=>{
             <input
                 type="file"
                 name="image_url"
-                required
-                onChange={(e) => setImageUrl(e.target.files[0])}
+                onChange={handleFileChange}
             />
+            {showImage && <img src={showImage} alt="Preview" width="100" />}
             </div>
 
           <div className='up-submit-cancel'>

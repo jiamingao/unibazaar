@@ -102,12 +102,16 @@ def update_product(productId):
      product_to_update.return_accepted = form.data["return_accepted"]
 
      image_file = form.data["image_url"]
-     image_file.filename = get_unique_filename(image_file.filename)
-     upload = upload_file_to_s3(image_file)
+     url=None
+
+     if image_file:
+        image_file.filename = get_unique_filename(image_file.filename)
+        upload = upload_file_to_s3(image_file)
+        url = upload["url"]
 
      main_image = next((img for img in product_to_update.product_images if img.main_image), None)
      if main_image:
-        main_image.image_url = upload["url"]
+        main_image.image_url = url if url else main_image.image_url
 
      db.session.commit()
      product_dict = product_to_update.to_dict()

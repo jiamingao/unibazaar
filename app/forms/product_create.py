@@ -11,5 +11,5 @@ class CreateProductForm(FlaskForm):
   description = StringField('Description', validators=[DataRequired()])
   category = SelectField("Category", choices=[("Clothing", "Clothing"),("Jewelry", "Jewelry"),("Home & Living", "Home & Living"),("Craft Supplies", "Craft Supplies")])
   return_accepted = BooleanField("Is refundable")
-  image_url = FileField("Product Image", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
+  image_url = FileField("Product Image", validators=[FileAllowed(list(ALLOWED_EXTENSIONS))])
   submit= SubmitField("Submit")
