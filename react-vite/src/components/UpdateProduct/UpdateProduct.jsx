@@ -1,20 +1,23 @@
 import {useEffect,useState} from 'react'
 import {useSelector, useDispatch} from "react-redux"
+import {useFSModal} from '../../context/FullScreenModal'
 import { useNavigate } from "react-router-dom"
-import { createProductThunk, getAllProductsThunk } from '../../redux/product'
+import { updateProductThunk, getAllProductsThunk } from '../../redux/product'
 
-
-const CreateProduct=()=>{
+const UpdateProduct = ({product, setProductPosted})=>{
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { closeModal } = useFSModal();
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [return_accepted, setReturnAccepted] = useState(false)
-  const [image_url, setImageUrl] = useState(null)
+  const [name, setName] = useState(product?.name||'');
+  const [price, setPrice] = useState(product?.price||'');
+  const [description, setDescription] = useState(product?.description||'');
+  const [category, setCategory] = useState(product?.category||'');
+  const [return_accepted, setReturnAccepted] = useState(product?.return_accepted||false)
+  const [image_url, setImageUrl] = useState(product?.main_image[0].image_url ||null)
   const [error, setError] = useState({})
+  const [showImage, setShowImage] = useState();
+  const [imageLoading, setImageLoading] = useState(false);
 
   const currUser = useSelector(state=>state.session.user)
 
@@ -22,8 +25,32 @@ const CreateProduct=()=>{
     if(!currUser) navigate('/')
   }, [navigate, currUser])
 
+  useEffect(()=>{
+    if(product){
+      setName(product.name || '')
+      setPrice(product.price||'')
+      setDescription(product.description ||'')
+      setCategory(product.category || '')
+      setReturnAccepted(product.return_accepted || false)
+      setShowImage(product.main_image[0].image_url || null)
+    }
+  },[product])
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImageUrl(file);
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setShowImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
   const handleSubmit=async(e)=>{
     e.preventDefault();
+    setImageLoading(true)
     const formData = new FormData()
 
     formData.append('name', name)
@@ -36,11 +63,14 @@ const CreateProduct=()=>{
     // console.log(Array.from(formData))
 
     try{
-      const product = await dispatch(createProductThunk(formData))
-      console.log(product.id)
-      //change it to product detail later
+      await dispatch(updateProductThunk(formData, product.id)).then(() => {
+        setProductPosted(true);
+        closeModal();
+      })
+      // console.log(product.id)
       await dispatch(getAllProductsThunk())
-      navigate(`/`)
+      navigate(`/products/${product.id}`)
+      setImageLoading(false)
     }catch(error){
       console.error("creating product error:", error);
     }
@@ -53,18 +83,19 @@ const CreateProduct=()=>{
     if(!name.length) errorObj.name = "Name is Required"
     if(!price.length) errorObj.price = "Price is Required"
     if(!description.length) errorObj.description = "Description is Required"
+    if(!image_url) errorObj.description = "Image is Required"
     setError(errorObj)
 
-}, [name,price,description])
+}, [name,price,description, image_url])
 
   return(
-    <div className='create-product-container'>
-    <h1 className='cp-title'>Add a New Product</h1>
-      <form className='cp-form' onSubmit={handleSubmit}>
-          <div className='cp-inputs'>
+    <div className='update-product-container'>
+    <h1 className='up-title'>Update Your Product</h1>
+      <form className='up-form' onSubmit={handleSubmit}>
+          <div className='up-inputs'>
 
-            <div className='cp-name'>
-            <label className='cp-label'>Name:</label>
+            <div className='up-name'>
+            <label className='up-label'>Name:</label>
               <input
               type="text"
               name="name" placeholder='product name'
@@ -76,8 +107,8 @@ const CreateProduct=()=>{
               {error.name && <p className='error-msg'>{error.name}</p>}
             </div>
 
-            <div className='cp-price'>
-            <label className='cp-label'>Price:</label>
+            <div className='up-price'>
+            <label className='up-label'>Price:</label>
               <input
               type="text"
               name="price" placeholder='product price'
@@ -89,8 +120,8 @@ const CreateProduct=()=>{
               {error.price && <p className='error-msg'>{error.price}</p>}
             </div>
 
-            <div className='cp-description'>
-            <label className='cp-label'>
+            <div className='up-description'>
+            <label className='up-label'>
             <p>Describe Your Product:</p>
             </label>
             <textarea
@@ -104,8 +135,8 @@ const CreateProduct=()=>{
               {error.description && <p className='error-msg'>{error.description}</p>}
             </div>
 
-            <div className='cp-category'>
-            <label className='cp-label'>Category:</label>
+            <div className='up-category'>
+            <label className='up-label'>Category:</label>
             <select
                 id="category"
                 name="category"
@@ -120,8 +151,8 @@ const CreateProduct=()=>{
             </select>
             </div>
 
-            <div className='cp-return'>
-            <label className='cp-label'>Return Accepted?</label>
+            <div className='up-return'>
+            <label className='up-label'>Return Accepted?</label>
               <input
               type="checkbox"
               name="return_accepted"
@@ -130,26 +161,25 @@ const CreateProduct=()=>{
               />
             </div>
 
-            <div className='cp-image'>
-            <label className='cp-label'>Image:</label>
+            <div className='up-image'>
+            <label className='up-label'>Image:</label>
             <input
                 type="file"
                 name="image_url"
-                required
-                onChange={(e) => setImageUrl(e.target.files[0])}
+                onChange={handleFileChange}
             />
+            {showImage && <img src={showImage} alt="Preview" width="100" />}
             </div>
 
-          <div className='cp-submit'>
-          <button type="submit" disabled={Object.values(error).length > 0} className='cp-submit-btn'>Submit</button>
+          <div className='up-submit-cancel'>
+          <button className='up-submit-btn' type="submit" onClick={handleSubmit} disabled={Object.values(error).length > 0}>Confirm Updates</button>
+          <button className='cancel-button' onClick={closeModal}>Cancel</button>
           </div>
       </div>
       </form>
   </div>
   )
 
-
 }
 
-
-export default CreateProduct;
+export default UpdateProduct;

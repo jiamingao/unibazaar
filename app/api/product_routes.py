@@ -1,5 +1,5 @@
 from flask import Blueprint, request,jsonify
-from app.models import db, Product, ProductImage, Review
+from app.models import db, Product, ProductImage, Review, User
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
 from app.forms.product_create import CreateProductForm
@@ -17,6 +17,7 @@ def get_all_products():
     for product in products:
         product_dict = product.to_dict()
         product_dict['main_image'] = [image.to_dict() for image in product.product_images if image.main_image]
+        product_dict['images'] = [image.to_dict() for image in product.product_images]
         answer_dict[product_dict["id"]]=product_dict
     return answer_dict
 
@@ -26,9 +27,7 @@ def get_all_products():
 def get_product_detail(productId):
     product = Product.query.get(productId)
     product_dict = product.to_dict()
-    # product_dict['reviews'] = [review.to_dict() for review in product.reviews]
     product_dict['images'] = [image.to_dict() for image in product.product_images]
-
     return product_dict
 
 #get all products of current user
@@ -66,7 +65,7 @@ def create_new_product():
       image.filename = get_unique_filename(image.filename)
       upload = upload_file_to_s3(image)
 
-      print(upload)
+      # print(upload)
 
       new_image=ProductImage(
           product_id = new_product.id,
@@ -86,7 +85,7 @@ def create_new_product():
        return jsonify({"error": "Invalid form data"}), 400
 
 #update a product
-@product_routes.route('/<int:productId>/edit', methods=["POST"])
+@product_routes.route('/<int:productId>/edit', methods=["PUT"])
 def update_product(productId):
   product_to_update = Product.query.get(productId)
   if not product_to_update:
@@ -101,14 +100,23 @@ def update_product(productId):
      product_to_update.description = form.data["description"]
      product_to_update.category = form.data["category"]
      product_to_update.return_accepted = form.data["return_accepted"]
+
+     image_file = form.data["image_url"]
+     url=None
+
+     if image_file:
+        image_file.filename = get_unique_filename(image_file.filename)
+        upload = upload_file_to_s3(image_file)
+        url = upload["url"]
+
      main_image = next((img for img in product_to_update.product_images if img.main_image), None)
      if main_image:
-        main_image.image_url = form.data['image_url']
+        main_image.image_url = url if url else main_image.image_url
 
      db.session.commit()
      product_dict = product_to_update.to_dict()
      product_dict['images'] = [image.to_dict() for image in product_to_update.product_images]
-     return jsonify(product_dict)
+     return product_dict
   else:
      return jsonify({"error": "Invalid form data"}), 400
 
@@ -120,18 +128,35 @@ def delete_product(productId):
       return jsonify({"error": "Product not found"}),404
    db.session.delete(product_to_delete)
    db.session.commit()
-   return jsonify({"message": "Product successfully deleted"}), 200
+   # return jsonify({"message": "Product successfully deleted"}), 200
+   return product_to_delete.to_dict()
 
 
 #get all reviews by productId
 @product_routes.route('/<int:productId>/reviews')
 def get_reviews_by_product(productId):
    reviews = Review.query.filter_by(product_id = productId).all()
-   answer_dict={}
+   if not reviews:
+        return {}, 200
+
+   total_rating = 0
+   answer_dict = {
+        'reviews': {},
+        'poster':{}
+    }
+
    for review in reviews:
-    review_dict = review.to_dict()
-    answer_dict[review_dict["id"]]=review_dict
-   return answer_dict
+      poster = User.query.get(review.user_id)
+      poster_dict = poster.to_dict()
+      review_dict = review.to_dict()
+      review_dict['poster']=poster_dict
+      answer_dict['reviews'][review_dict["id"]] = review_dict
+      total_rating += review_dict['rating']
+      average_rating = total_rating / len(reviews)
+      answer_dict['average_rating'] = average_rating
+
+   return answer_dict, 200
+
 
 
 #create a review

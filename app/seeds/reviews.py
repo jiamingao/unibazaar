@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 def seed_reviews():
   reviews = [
         Review(user_id=2, product_id=1, review="Great jacket, perfect for cold weather.", rating=4),
+        Review(user_id=3, product_id=1, review="Love this jacket, very flattering", rating=5),
         Review(user_id=3, product_id=2, review="These jeans fit great and feel premium.", rating=5),
         Review(user_id=4, product_id=3, review="Interesting design, but the material is not what I expected.", rating=3),
         Review(user_id=5, product_id=4, review="Lovely summer dress, light and pretty.", rating=5),

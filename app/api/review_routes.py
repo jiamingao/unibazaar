@@ -7,7 +7,7 @@ review_routes = Blueprint('reviews', __name__)
 
 
 #update a review
-@review_routes.route('/<int:reviewId>/edit', methods=["POST"])
+@review_routes.route('/<int:reviewId>/edit', methods=["PUT"])
 def update_review(reviewId):
    review_to_update = Review.query.get(reviewId)
 
@@ -36,6 +36,3 @@ def delete_review(reviewId):
    db.session.delete(review_to_delete)
    db.session.commit()
    return jsonify({"message": "Product successfully deleted"}), 200
-
-
-
