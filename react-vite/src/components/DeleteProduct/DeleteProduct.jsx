@@ -17,7 +17,7 @@ const DeleteProduct = ({product,setProductPosted}) =>{
 return (
     <div className='delete-modal-container'>
       <div className='text-container'>
-        <h1 className='title-del'>Confirm Deletion</h1>
+        <h1 className='title-del'>Confirm Delete</h1>
         <p className='text-del'>Are you sure you want to delete this product?</p>
       </div>
       <div className='button-container'>

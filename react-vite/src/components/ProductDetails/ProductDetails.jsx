@@ -8,6 +8,8 @@ import { FaCheck } from "react-icons/fa";
 import './ProductDetails.css'
 import CreateReview from "../CreateReview/CreateReview";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import UpdateReview from "../UpdateReview/UpdateReview";
+import DeleteReview from "../DeleteReview/DeleteReview";
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
@@ -120,7 +122,7 @@ return(
           <p>★ {reviewsTotalObj.average_rating > 0 ? reviewsTotalObj.average_rating.toFixed(1) : 'New'}&nbsp;
         {reviewsArr.length > 0 ? ` · ${reviewsArr.length} ${reviewsArr.length === 1 ? 'Review' : 'Reviews'}` : ''}</p>
         {currUser && !isProductOwner(product.user_id) &&
-      <div className='Post-review'>
+      <div className='post-review'>
         <OpenModalButton
         className='review-btn'
         buttonText='Post Your Review'
@@ -139,7 +141,18 @@ return(
                       <div>{rating}</div>
                       <p className='review-content'>{review}</p>
                   </div>
-                </div>
+                  {currUser && currUser.id===poster.id &&
+                   <div className='update-delete-review'>
+                   <OpenModalButton
+                    className='review-btn'
+                    buttonText='update Your Review'
+                    modalComponent={<UpdateReview product={product} setReviewPosted={setReviewPosted} reviewId={id} />} />
+                    <OpenModalButton
+                    className='review-btn'
+                    buttonText='delete Your Review'
+                    modalComponent={<DeleteReview setReviewPosted={setReviewPosted} reviewId={id} />} />
+                  </div>}
+               </div>
               ))
             }
           </div>
