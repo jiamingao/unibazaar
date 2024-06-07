@@ -10,6 +10,7 @@ import CreateReview from "../CreateReview/CreateReview";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import UpdateReview from "../UpdateReview/UpdateReview";
 import DeleteReview from "../DeleteReview/DeleteReview";
+import { FaHeart } from "react-icons/fa";
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
@@ -76,6 +77,24 @@ const addFavBtn = (e) => {
   alert("Feature coming soon");
 };
 
+const StarDisplay = ({ rating }) => {
+
+  const stars = [1, 2, 3, 4, 5].map((_, index)=>{
+    return index < rating ? '★' : '☆';
+  })
+
+  return (
+      <div style={{ fontSize: '24px', color: 'gray' }}>
+          {stars.map((star, index) => (
+              <span key={index} style={{ color: index < rating ? 'gold' : undefined }}>
+                  {star}
+              </span>
+          ))}
+      </div>
+  );
+};
+
+
 return(
   <div className="product-details">
     {product ? (
@@ -100,7 +119,7 @@ return(
         <div className="btn-container">
         <button className='buy-btn' onClick={buyBtn}>Buy it now</button>
         <button className='add-cart-btn' onClick={addCartBtn}>Add to cart</button>
-        <button className='add-fav-btn' onClick={addFavBtn}>Add to collection</button>
+        <button className='add-fav-btn' onClick={addFavBtn}><FaHeart color="#B50330" />Add to collection</button>
         </div>
 
         <div className="addtional-info-container">
@@ -135,10 +154,14 @@ return(
             {
               reviewsArr.map(({id, poster, created_at, review, rating})=>(
                 <div key={id}>
-                  <div className="review-container">
-                    {poster && <h2 className="name">{poster.firstname}</h2>}
+                  <div className="review-detail-container">
+                    <div className="name-and-date">
+                    {poster && <h3 className="poster-name">{poster.firstname}</h3>}
                       <p className='date-month'>{formatDate(created_at)}</p>
-                      <div>{rating}</div>
+                      </div>
+                      <div>
+                        <StarDisplay rating={rating} />
+                        </div>
                       <p className='review-content'>{review}</p>
                   </div>
                   {currUser && currUser.id===poster.id &&
