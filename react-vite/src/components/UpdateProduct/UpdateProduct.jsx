@@ -3,6 +3,8 @@ import {useSelector, useDispatch} from "react-redux"
 import {useFSModal} from '../../context/FullScreenModal'
 import { useNavigate } from "react-router-dom"
 import { updateProductThunk, getAllProductsThunk } from '../../redux/product'
+import './UpdateProduct.css'
+
 
 const UpdateProduct = ({product, setProductPosted})=>{
   const dispatch = useDispatch();
@@ -94,7 +96,7 @@ const UpdateProduct = ({product, setProductPosted})=>{
       <form className='up-form' onSubmit={handleSubmit}>
           <div className='up-inputs'>
 
-            <div className='up-name'>
+            <div className='up-field'>
             <label className='up-label'>Name:</label>
               <input
               type="text"
@@ -107,7 +109,7 @@ const UpdateProduct = ({product, setProductPosted})=>{
               {error.name && <p className='error-msg'>{error.name}</p>}
             </div>
 
-            <div className='up-price'>
+            <div className='up-field'>
             <label className='up-label'>Price:</label>
               <input
               type="text"
@@ -120,7 +122,7 @@ const UpdateProduct = ({product, setProductPosted})=>{
               {error.price && <p className='error-msg'>{error.price}</p>}
             </div>
 
-            <div className='up-description'>
+            <div className='up-field'>
             <label className='up-label'>
             <p>Describe Your Product:</p>
             </label>
@@ -135,7 +137,7 @@ const UpdateProduct = ({product, setProductPosted})=>{
               {error.description && <p className='error-msg'>{error.description}</p>}
             </div>
 
-            <div className='up-category'>
+            <div className='up-field'>
             <label className='up-label'>Category:</label>
             <select
                 id="category"
@@ -161,7 +163,7 @@ const UpdateProduct = ({product, setProductPosted})=>{
               />
             </div>
 
-            <div className='up-image'>
+            <div className='up-field'>
             <label className='up-label'>Image:</label>
             <input
                 type="file"

@@ -2,6 +2,7 @@ import {useEffect,useState} from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { createProductThunk, getAllProductsThunk } from '../../redux/product'
+import './CreateProductForm.css'
 
 
 const CreateProduct=()=>{
@@ -13,8 +14,16 @@ const CreateProduct=()=>{
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [return_accepted, setReturnAccepted] = useState(false)
-  const [image_url, setImageUrl] = useState(null)
   const [error, setError] = useState({})
+  // const [image_url, setImageUrl] = useState(null)
+
+  const [imageUrls, setImageUrls] = useState([null, null, null, null, null])
+
+  const handleImageChange = (file, index) => {
+    const newImageUrls = [...imageUrls];
+    newImageUrls[index] = file;
+    setImageUrls(newImageUrls);
+  };
 
   const currUser = useSelector(state=>state.session.user)
 
@@ -31,7 +40,14 @@ const CreateProduct=()=>{
     formData.append('description', description)
     formData.append('category', category)
     formData.append('return_accepted', return_accepted)
-    formData.append('image_url', image_url)
+    // formData.append('image_url', image_url)
+
+    imageUrls.forEach((file, index) => {
+      if (file !== null) {
+        formData.append(`image_url_${index}`, file);
+      }
+    });
+
 
     // console.log(Array.from(formData))
 
@@ -63,7 +79,7 @@ const CreateProduct=()=>{
       <form className='cp-form' onSubmit={handleSubmit}>
           <div className='cp-inputs'>
 
-            <div className='cp-name'>
+            <div className='cp-field'>
             <label className='cp-label'>Name:</label>
               <input
               type="text"
@@ -76,7 +92,7 @@ const CreateProduct=()=>{
               {error.name && <p className='error-msg'>{error.name}</p>}
             </div>
 
-            <div className='cp-price'>
+            <div className='cp-field'>
             <label className='cp-label'>Price:</label>
               <input
               type="text"
@@ -89,7 +105,7 @@ const CreateProduct=()=>{
               {error.price && <p className='error-msg'>{error.price}</p>}
             </div>
 
-            <div className='cp-description'>
+            <div className='cp-field'>
             <label className='cp-label'>
             <p>Describe Your Product:</p>
             </label>
@@ -104,7 +120,7 @@ const CreateProduct=()=>{
               {error.description && <p className='error-msg'>{error.description}</p>}
             </div>
 
-            <div className='cp-category'>
+            <div className='cp-field'>
             <label className='cp-label'>Category:</label>
             <select
                 id="category"
@@ -120,7 +136,7 @@ const CreateProduct=()=>{
             </select>
             </div>
 
-            <div className='cp-return'>
+            <div className='cp-field-return'>
             <label className='cp-label'>Return Accepted?</label>
               <input
               type="checkbox"
@@ -130,15 +146,20 @@ const CreateProduct=()=>{
               />
             </div>
 
-            <div className='cp-image'>
-            <label className='cp-label'>Image:</label>
-            <input
+            <div className='cp-field'>
+            <label className='cp-label'>Upload at least one image:</label>
+              {imageUrls.map((_, index) => (
+              <div key={index}>
+                <label className='cp-label'>Image {index + 1}:</label>
+                <input
                 type="file"
-                name="image_url"
-                required
-                onChange={(e) => setImageUrl(e.target.files[0])}
-            />
-            </div>
+                name={`image_url_${index}`}
+                onChange={(e) => handleImageChange(e.target.files[0], index)}
+                required={index === 0}
+                />
+                </div>
+              ))}
+              </div>
 
           <div className='cp-submit'>
           <button type="submit" disabled={Object.values(error).length > 0} className='cp-submit-btn'>Submit</button>

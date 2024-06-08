@@ -61,19 +61,21 @@ def create_new_product():
       db.session.add(new_product)
       db.session.commit()
 
-      image = form.data["image_url"]
-      image.filename = get_unique_filename(image.filename)
-      upload = upload_file_to_s3(image)
+      # image = form.data["image_url"]
+      # image.filename = get_unique_filename(image.filename)
+      # upload = upload_file_to_s3(image)
 
-      # print(upload)
-
-      new_image=ProductImage(
+      files = [request.files.get(f'image_url_{i}') for i in range(5)]
+      for file in files:
+         if file:  
+            file.filename = get_unique_filename(file.filename)
+            upload = upload_file_to_s3(file)
+            new_image=ProductImage(
           product_id = new_product.id,
           image_url = upload["url"],
-          main_image= True
-      )
+          main_image= True)
+            db.session.add(new_image)
 
-      db.session.add(new_image)
       db.session.commit()
 
       product = Product.query.get(new_product.id)

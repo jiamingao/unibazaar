@@ -1,0 +1,48 @@
+.create-product-container{
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.cp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cp-field{
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+
+}
+
+.cp-label{
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.error-msg{
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.cp-submit{
+  margin-top: 10px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #F1641E;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}

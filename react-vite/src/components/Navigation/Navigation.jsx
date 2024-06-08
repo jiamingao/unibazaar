@@ -29,7 +29,8 @@ function Navigation() {
       <div className="searchBar" > <IoSearchCircle /> <input className='search' placeholder="Search" type="search"/> </div>
     {currUser ? (
       <div className="logged-in-container">
-      <NavLink to='/products/new'className="create-link"> Create </NavLink>
+      <NavLink to='/products/new'className="create-link"> Create New Product </NavLink>
+      <NavLink to='/products/current'className="create-link"> Manage your Products </NavLink>
       <ProfileButton />
         </div>
     ) : (

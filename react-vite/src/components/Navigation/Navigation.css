@@ -22,3 +22,9 @@
 .profile-dropdown {
   position: absolute;
 }
+
+.logged-in-container{
+  width: 360px;
+  display: flex;
+  justify-content: space-between;
+}
