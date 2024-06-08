@@ -10,12 +10,21 @@ import CreateReview from "../CreateReview/CreateReview";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import UpdateReview from "../UpdateReview/UpdateReview";
 import DeleteReview from "../DeleteReview/DeleteReview";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
   const {productId} = useParams();
   const [reviewPosted, setReviewPosted] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((currIndex) => (currIndex + 1) % product.images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((currIndex) => (currIndex - 1 + product.images.length) % product.images.length);
+  };
 
   const currUser = useSelector(state=>state.session.user)
   // console.log(currUser)
@@ -105,10 +114,20 @@ return(
       <div className="other-img-container">
           {product.images.length > 1 && product.images.slice(1).map(image => (<img key={image.id} className="other-imgs" src={image.image_url} alt="other-images" />))}
         </div>
-        <div className="main-img-conatainer">
-        <img className="main-img" src={product.images.length > 0 ? product.images[0].image_url : 'default-image-url'} alt="main-image" />
+
+      <div className="main-img-conatainer">
+        { product.images.length > 1?(
+      <>
+      <button className="arrow-btn-left" onClick={handlePrevImage}><FaChevronLeft /></button>
+      <img className="main-img" src={product.images[currentImageIndex].image_url} alt="main product" />
+      <button className="arrow-btn-right" onClick={handleNextImage}><FaChevronRight /></button>
+      </>
+        ):(
+          <img className="main-img" src={product.images.length > 0 ? product.images[0].image_url : 'default-image-url'} alt="main-image" />
+        )
+        }
         </div>
-      </div>
+        </div>
 
       <div className="product-info-container">
         <div className="price-name-container">

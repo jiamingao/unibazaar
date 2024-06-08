@@ -28,33 +28,38 @@ function LoginFormModal() {
     }
   };
 
+  const isSubmitDisabled = email.length === 0 || password.length === 0;
+
   return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
+    <div className="login-container">
+      <h1 className="signin-title">Log In</h1>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div className="login-field">
+        <p>Email {errors.email && <p>{errors.email}</p>}</p>
           <input
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          Password
+        </div>
+
+        <div className="login-field">
+        <p>Password {errors.password && <p>{errors.password}</p>}</p>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        {errors.password && <p>{errors.password}</p>}
-        <button type="submit">Log In</button>
+        </div>
+
+        <div className="login-field">
+        <button className="submit-button-login" type="submit" disabled={isSubmitDisabled}>Log In</button>
+        </div>
+
       </form>
-    </>
+    </div>
   );
 }
 

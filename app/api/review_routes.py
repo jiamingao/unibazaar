@@ -8,6 +8,7 @@ review_routes = Blueprint('reviews', __name__)
 
 #update a review
 @review_routes.route('/<int:reviewId>/edit', methods=["PUT"])
+@login_required
 def update_review(reviewId):
    review_to_update = Review.query.get(reviewId)
 
@@ -29,6 +30,7 @@ def update_review(reviewId):
 
 #delete a review
 @review_routes.route('/<int:reviewId>/delete',methods=["DELETE"])
+@login_required
 def delete_review(reviewId):
    review_to_delete = Review.query.get(reviewId)
    if not review_to_delete:

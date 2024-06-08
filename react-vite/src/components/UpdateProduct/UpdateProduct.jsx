@@ -17,10 +17,10 @@ const UpdateProduct = ({product, setProductPosted})=>{
   const [category, setCategory] = useState(product?.category||'');
   const [return_accepted, setReturnAccepted] = useState(product?.return_accepted||false)
   const [error, setError] = useState({})
-  const [showImages, setShowImages] = useState([]);
+  // const [showImages, setShowImages] = useState([]);
   const [imageLoading, setImageLoading] = useState(false);
   // const [image_url, setImageUrl] = useState(product?.main_image[0].image_url ||null)
-  console.log('line 23', product)
+  // console.log('line 23', product)
   const [imageUrls, setImageUrls] = useState(product?.images.map(img => img.image_url) || [null, null, null, null, null]);
   const [newImages, setNewImages] = useState([null, null, null, null, null]);
 
@@ -202,7 +202,6 @@ const handleFileChange = (file, index) => {
     {imageUrl && <img src={imageUrl} alt={`Preview ${index + 1}`} width="30" />}
   </div>
 ))}
-            {/* {showImage && <img src={showImage} alt="Preview" width="100" />} */}
             </div>
             </div>
 

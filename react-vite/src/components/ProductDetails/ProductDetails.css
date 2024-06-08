@@ -23,6 +23,37 @@ body {
   width: 65%;
 }
 
+.arrow-btn-left{
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  font-weight: 500;
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.arrow-btn-right{
+  position: absolute;
+  top: 50%;
+  right: 38%;
+  font-weight: 500;
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
 
 
 .other-img-container{

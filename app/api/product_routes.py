@@ -32,6 +32,7 @@ def get_product_detail(productId):
 
 #get all products of current user
 @product_routes.route('/current')
+@login_required
 def get_products_by_current_user():
     products = Product.query.filter_by(user_id=current_user.id).all()
     answer_dict={}
@@ -43,8 +44,8 @@ def get_products_by_current_user():
     return answer_dict
 
 #create a product
-#future goal: add mutiple images
 @product_routes.route('/new', methods=['POST'])
+@login_required
 def create_new_product():
     form = CreateProductForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -87,6 +88,7 @@ def create_new_product():
 
 #update a product
 @product_routes.route('/<int:productId>/edit', methods=["PUT"])
+@login_required
 def update_product(productId):
   product_to_update = Product.query.get(productId)
   if not product_to_update:
@@ -139,6 +141,7 @@ def update_product(productId):
 
 #delete a product
 @product_routes.route('/<int:productId>/delete', methods=["DELETE"])
+@login_required
 def delete_product(productId):
    product_to_delete = Product.query.get(productId)
    if not product_to_delete:
@@ -178,6 +181,7 @@ def get_reviews_by_product(productId):
 
 #create a review
 @product_routes.route('/<int:productId>/reviews/new', methods=["POST"])
+@login_required
 def create_a_review(productId):
    form = CreateReviewForm()
    form['csrf_token'].data = request.cookies['csrf_token']
