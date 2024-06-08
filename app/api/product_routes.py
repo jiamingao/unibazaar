@@ -38,6 +38,7 @@ def get_products_by_current_user():
     for product in products:
         product_dict = product.to_dict()
         product_dict['main_image'] = [image.to_dict() for image in product.product_images if image.main_image]
+        product_dict['images'] = [image.to_dict() for image in product.product_images]
         answer_dict[product_dict["id"]]=product_dict
     return answer_dict
 
@@ -61,19 +62,17 @@ def create_new_product():
       db.session.add(new_product)
       db.session.commit()
 
-      # image = form.data["image_url"]
-      # image.filename = get_unique_filename(image.filename)
-      # upload = upload_file_to_s3(image)
 
       files = [request.files.get(f'image_url_{i}') for i in range(5)]
-      for file in files:
-         if file:  
+      for index, file in enumerate(files):
+          if file:
             file.filename = get_unique_filename(file.filename)
             upload = upload_file_to_s3(file)
-            new_image=ProductImage(
-          product_id = new_product.id,
-          image_url = upload["url"],
-          main_image= True)
+            new_image = ProductImage(
+               product_id=new_product.id,
+               image_url=upload["url"],
+               main_image=(index == 0)  # Only the first file gets main_image=True
+                )
             db.session.add(new_image)
 
       db.session.commit()
@@ -103,17 +102,32 @@ def update_product(productId):
      product_to_update.category = form.data["category"]
      product_to_update.return_accepted = form.data["return_accepted"]
 
-     image_file = form.data["image_url"]
-     url=None
+     files = [request.files.get(f'image_url_{i}') for i in range(5)]
+     existing_images = product_to_update.product_images
+     main_image_set = False
 
-     if image_file:
-        image_file.filename = get_unique_filename(image_file.filename)
-        upload = upload_file_to_s3(image_file)
-        url = upload["url"]
+     for index, file in enumerate(files):
+      if file:
+         file.filename = get_unique_filename(file.filename)
+         upload = upload_file_to_s3(file)
+         url = upload["url"]
 
-     main_image = next((img for img in product_to_update.product_images if img.main_image), None)
-     if main_image:
-        main_image.image_url = url if url else main_image.image_url
+         if index < len(existing_images):
+            existing_images[index].image_url = url
+            existing_images[index].main_image = (index == 0)
+         else:
+            new_image = ProductImage(
+                        product_id=productId,
+                        image_url=url,
+                        main_image=(index == 0)
+                    )
+            db.session.add(new_image)
+         if index == 0:
+            main_image_set = True
+
+        # Ensure there is a main image if not already set
+      if not main_image_set and existing_images:
+         existing_images[0].main_image = True
 
      db.session.commit()
      product_dict = product_to_update.to_dict()
@@ -121,6 +135,7 @@ def update_product(productId):
      return product_dict
   else:
      return jsonify({"error": "Invalid form data"}), 400
+
 
 #delete a product
 @product_routes.route('/<int:productId>/delete', methods=["DELETE"])

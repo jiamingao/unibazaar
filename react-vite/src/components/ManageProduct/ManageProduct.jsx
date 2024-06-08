@@ -18,7 +18,7 @@ const ManageProduct=()=>{
 
   const currPorductsArr = Object.values(currPorductsObj)
 
-  // console.log("!!!!!!!!!!!!!!!!!!!!!currPorductsArr", currPorductsArr)
+  console.log("!!!!!!!!!!!!!!!!!!!!!currPorductsArr", currPorductsArr)
   const [productPosted, setProductPosted] = useState(false)
 
 
@@ -39,7 +39,7 @@ const ManageProduct=()=>{
         {currPorductsArr.map((product) => (
           <div key={product.id} className="product">
           <div className="product-img">
-          <img src={product.main_image[0].image_url} alt={product.name} className="product-image" />
+          <img src={product.images[0].image_url} alt={product.name} className="product-image" />
           </div>
 
           <div className="product-name">{product.name}</div>

@@ -26,7 +26,7 @@ function LandingPage(){
       <div className="product-container">
         {productsArr.map((product) => (
           <div onClick={()=>navigate(`/products/${product.id}`)} key={product.id} className="product">
-            <img src={product.main_image[0].image_url} alt={product.name} className="product-image" />
+            <img src={product.images[0].image_url} alt={product.name} className="product-image" />
             <p className="price-container">
               <span className="badge-container">
                   <span className="price-value">${product.price}</span>
