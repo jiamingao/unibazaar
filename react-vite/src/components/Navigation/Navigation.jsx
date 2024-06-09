@@ -8,13 +8,25 @@ import { FaGift } from "react-icons/fa";
 import { IoSearchCircle } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { thunkLogin } from '../../redux/session'
+import { thunkLogin } from '../../redux/session';
+import { LuShoppingCart } from "react-icons/lu";
+import { FaRegHeart } from "react-icons/fa";
 
 
 function Navigation() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const currUser = useSelector(state => state.session.user)
+
+  const cartIcon = (e) => {
+    e.preventDefault();
+    alert("Feature coming soon");
+  };
+
+  const heartIcon = (e) => {
+    e.preventDefault();
+    alert("Feature coming soon");
+  };
 
   return (
     <div className="navigation-container">
@@ -26,17 +38,22 @@ function Navigation() {
       <h2 className="nav-title">UniBazaar</h2>
       </NavLink>
       </div>
-      <div className="searchBar" > <IoSearchCircle /> <input className='search' placeholder="Search" type="search"/> </div>
+      <div className="searchBar" > <IoSearchCircle className="search-button" size={35} /> <input className='search-input' placeholder="Search for anthing" type="search"/> </div>
+      <div className="nav-right-part">
     {currUser ? (
       <div className="logged-in-container">
-      <NavLink to='/products/new'className="create-link"> Create New Product </NavLink>
-      <NavLink to='/products/current'className="create-link"> Manage your Products </NavLink>
+      <FaRegHeart className="heart-icon" onClick={heartIcon} size={30} />
+
+      <NavLink to='/products/current'className="manage-product-btn">
+      <div className="create-link">Manage your Products</div>
+      </NavLink>
+
       <ProfileButton />
         </div>
     ) : (
         <div className="non-logged-in-container">
             <button
-                id="demo-login-button"
+                className="demo-login-button"
                 onClick={async () => {
                     await dispatch(
                         thunkLogin({
@@ -61,6 +78,8 @@ function Navigation() {
             />
         </div>
     )}
+    <div className="shoping-cart"><LuShoppingCart className="cart-icon" onClick={cartIcon} size={30} /></div>
+    </div>
 </div>
   );
 }

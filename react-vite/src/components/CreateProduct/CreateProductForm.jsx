@@ -66,21 +66,35 @@ const CreateProduct=()=>{
   useEffect(() => {
     const errorObj = {}
 
-    if(!name.length) errorObj.name = "Name is Required"
-    if(!price.length) errorObj.price = "Price is Required"
-    if(!description.length) errorObj.description = "Description is Required"
+    if (!name.length) errorObj.name = "Required";
+
+    if (!price.length) {
+        errorObj.price = "Required";
+    } else if (isNaN(price)) {
+        errorObj.price = "Price must be a number";
+    } else if (parseFloat(price) <= 0) {
+        errorObj.price = "Price must be positive";
+    }
+
+    if (!description.length) errorObj.description = "Required";
+    else if (description.length < 30) errorObj.description = "Please write at least 30 characters";
+
+    if (!imageUrls[0]) errorObj.imageUrls = "Please upload at least one picture to Image 1";
+
     setError(errorObj)
 
-}, [name,price,description])
+}, [name,price,description,imageUrls])
+
 
   return(
+
     <div className='create-product-container'>
-    <h1 className='cp-title'>Add a New Product</h1>
+      <div className='cp-form-box'>
       <form className='cp-form' onSubmit={handleSubmit}>
-          <div className='cp-inputs'>
+      <div className='cp-title'>Add a New Product</div>
 
             <div className='cp-field'>
-            <label className='cp-label'>Name:</label>
+            <label className='cp-label'>Name:{error.name && <p className='error-msg'>{error.name}</p>}</label>
               <input
               type="text"
               name="name" placeholder='product name'
@@ -88,12 +102,9 @@ const CreateProduct=()=>{
               onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="error-container">
-              {error.name && <p className='error-msg'>{error.name}</p>}
-            </div>
 
             <div className='cp-field'>
-            <label className='cp-label'>Price:</label>
+            <label className='cp-label'>Price:{error.price && <p className='error-msg'>{error.price}</p>}</label>
               <input
               type="text"
               name="price" placeholder='product price'
@@ -101,23 +112,15 @@ const CreateProduct=()=>{
               onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-            <div className="error-container">
-              {error.price && <p className='error-msg'>{error.price}</p>}
-            </div>
 
             <div className='cp-field'>
-            <label className='cp-label'>
-            <p>Describe Your Product:</p>
-            </label>
+            <label className='cp-label'>Describe Your Product:{error.description && <p className='error-msg'>{error.description}</p>}</label>
             <textarea
                 name="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Please write at least 30 characters"
               />
-            </div>
-            <div className="error-container">
-              {error.description && <p className='error-msg'>{error.description}</p>}
             </div>
 
             <div className='cp-field'>
@@ -147,10 +150,10 @@ const CreateProduct=()=>{
             </div>
 
             <div className='cp-field'>
-            <label className='cp-label'>Upload at least one image:</label>
+            <label className='cp-label'>Upload at least one image:{error.imageUrls && <p className='error-msg'>{error.imageUrls}</p>}</label>
               {imageUrls.map((_, index) => (
               <div key={index}>
-                <label className='cp-label'>Image {index + 1}:</label>
+                <label className='cp-label-images'>Image {index + 1}:</label>
                 <input
                 type="file"
                 name={`image_url_${index}`}
@@ -161,12 +164,12 @@ const CreateProduct=()=>{
               ))}
               </div>
 
-          <div className='cp-submit'>
           <button type="submit" disabled={Object.values(error).length > 0} className='cp-submit-btn'>Submit</button>
-          </div>
-      </div>
+
       </form>
+      </div>
   </div>
+
   )
 
 

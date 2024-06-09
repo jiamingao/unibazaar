@@ -3,6 +3,9 @@ import { thunkLogin } from "../../redux/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+import SignupFormModal from "../SignupFormModal";
+import OpenModalButton from "../OpenModalButton";
+
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -31,35 +34,49 @@ function LoginFormModal() {
   const isSubmitDisabled = email.length === 0 || password.length === 0;
 
   return (
+    <section>
     <div className="login-container">
-      <h1 className="signin-title">Log In</h1>
+      <div className="login-form-box">
       <form className="login-form" onSubmit={handleSubmit}>
+        <div className="login-title">Log In</div>
+
         <div className="login-field">
-        <p>Email {errors.email && <p>{errors.email}</p>}</p>
           <input
             type="text"
+            className="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <label>Email {errors.email && <p>{errors.email}</p>}</label>
         </div>
 
         <div className="login-field">
-        <p>Password {errors.password && <p>{errors.password}</p>}</p>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <label>Password {errors.password && <p>{errors.password}</p>}</label>
         </div>
 
-        <div className="login-field">
         <button className="submit-button-login" type="submit" disabled={isSubmitDisabled}>Log In</button>
+
+        <div className="register">
+          <p>Don't have an account?
+          <OpenModalButton
+                buttonText="register"
+                modalComponent={<SignupFormModal />}
+                className="login-register-button"
+            />
+            </p>
         </div>
 
       </form>
+      </div>
     </div>
+    </section>
   );
 }
 

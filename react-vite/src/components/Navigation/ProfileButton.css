@@ -1,0 +1,29 @@
+* {
+  font-family: Arial, sans-serif;
+
+}
+
+.user-info-container{
+  font-size: 13px;
+
+}
+
+.profile-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 24px;
+}
+
+.profile-logout{
+  color: black;
+  font-size: 13px;
+  padding: 4px 4px;
+  border-radius: 6px;
+  border: none;
+  background-color: #f1641e61;
+}
+
+.profile-logout:hover{
+  box-shadow: 0 3px 6px rgba(60, 64, 67, .3);
+}

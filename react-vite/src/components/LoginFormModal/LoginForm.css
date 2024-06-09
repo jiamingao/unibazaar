@@ -1,47 +1,125 @@
-.login-container{
-  width: 300px;
-  margin: auto;
-  padding: 10px;
+* {
+  /* margin: 0;
+  padding: 0; */
   font-family: Arial, sans-serif;
 }
 
-.login-form{
+
+section {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.login-form-box{
+  position: relative;
+  width: 400px;
+  height: 450px;
+  /* background: transparent; */
+  background: #f1641e61;
+  border: none;
+  border-radius: 20px;
+  backdrop-filter: blur(15px) brightness(90%);
+  display: flex;
   justify-content: center;
   align-items: center;
 
 }
 
-.signin-title {
-  font-size: 24px;
-  margin-bottom: 20px;
+.login-title {
+  font-size: 2em;
+  color: #fff;
   text-align: center;
 }
 
-.login-form label {
-  display: block;
+
+.login-field{
+  position: relative;
+  margin: 30px 0;
+  width: 310px;
+  border-bottom: 2px solid #fff;
+
 }
 
-.login-form input[type="text"],
-.login-form input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.login-field label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1em;
+  pointer-events: none;
+  transition: 0.5s;
 }
+
+/* animations: start */
+input:focus~label,
+input:valid~label {
+    top: -5px;
+}
+
+/* animation:end */
+.login-field input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    padding: 0 35px 0 5px;
+    color: #fff;
+}
+
 
 .submit-button-login {
-  display: block;
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #000;
+  height: 40px;
+  border-radius: 40px;
+  background-color: #fff;
   border: none;
-  border-radius: 4px;
+  outline: none;
   cursor: pointer;
-  margin-top: 20px;
+  font-size: 1em;
+  font-weight: 600;
+}
 
+.register {
+  font-size: 0.9em;
+  color: #fff;
+  text-align: center;
+  margin: 25px 0 10px;
+}
+
+.register p a{
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+.login-register-button{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  margin: 25px 0 10px;
+  text-decoration: underline;
+}
+
+.login-register-button:hover{
+  cursor: pointer;
+  color: black;
+}
+
+@media screen and (max-width: 480px) {
+  .login-form-box {
+      width: 100%;
+      border-radius: 0px;
+  }
 }
