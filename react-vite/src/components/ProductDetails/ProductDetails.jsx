@@ -11,6 +11,7 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import UpdateReview from "../UpdateReview/UpdateReview";
 import DeleteReview from "../DeleteReview/DeleteReview";
 import { FaHeart, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
@@ -93,7 +94,7 @@ const StarDisplay = ({ rating }) => {
   })
 
   return (
-      <div style={{ fontSize: '24px', color: 'gray' }}>
+      <div style={{ fontSize: '18px', color: 'gray' }}>
           {stars.map((star, index) => (
               <span key={index} style={{ color: index < rating ? 'gold' : undefined }}>
                   {star}
@@ -162,7 +163,7 @@ return(
         {currUser && !isProductOwner(product.user_id) &&
       <div className='post-review'>
         <OpenModalButton
-        className='review-btn'
+        className='review-post-btn'
         buttonText='Post Your Review'
         modalComponent={<CreateReview product={product} setReviewPosted={setReviewPosted} />} />
       </div>
@@ -172,10 +173,10 @@ return(
           <div className="review-list">
             {
               reviewsArr.map(({id, poster, created_at, review, rating})=>(
-                <div key={id}>
+                <div key={id} className="review-detail-box">
                   <div className="review-detail-container">
                     <div className="name-and-date">
-                    {poster && <h3 className="poster-name">{poster.firstname}</h3>}
+                    {poster && <div className="poster-name">{poster.firstname}</div>}
                       <p className='date-month'>{formatDate(created_at)}</p>
                       </div>
                       <div>
@@ -186,12 +187,12 @@ return(
                   {currUser && currUser.id===poster.id &&
                    <div className='update-delete-review'>
                    <OpenModalButton
-                    className='review-btn'
-                    buttonText='update Your Review'
+                    className='review-btn-edit'
+                    buttonText='Edit'
                     modalComponent={<UpdateReview product={product} setReviewPosted={setReviewPosted} reviewId={id} />} />
                     <OpenModalButton
-                    className='review-btn'
-                    buttonText='delete Your Review'
+                    className='review-btn-delete'
+                    buttonText='Delete'
                     modalComponent={<DeleteReview setReviewPosted={setReviewPosted} reviewId={id} />} />
                   </div>}
                </div>

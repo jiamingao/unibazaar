@@ -1,7 +1,7 @@
-body {
-  font-family: Helvetica, Arial, sans-serif;
-
+* {
+  font-family: Arial, sans-serif;
 }
+
 
 .page-container{
   display: flex;
@@ -81,6 +81,7 @@ body {
 .btn-container{
   display: flex;
   flex-direction: column;
+  gap:15px;
 }
 
 .return{
@@ -149,13 +150,77 @@ body {
 
 
 .review-container {
-  width: 75%;
+  width: 60%;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.review-detail-box{
+  display: flex;
+  flex-direction: column;
+  border-bottom: 0.7px solid rgba(128, 128, 128, 0.388);
 }
 
 .name-and-date{
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.review-head{
+  border-bottom: 1.5px solid rgba(128, 128, 128, 0.388);
+}
+
+.review-post-btn{
+  border-radius: 10px;
+  border: 1.5px solid rgba(128, 128, 128, 0.388);
+  align-items: center;
+  margin-bottom: 8px;
+  color: white;
+  background: black;
+}
+
+.update-delete-review{
+  margin-bottom: 2px;
+}
+
+.review-btn-edit {
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+	background-color:#ededed;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#777777;
+	font-size:10px;
+	padding:4px 8px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+
+}
+
+.review-btn-edit:hover {
+	background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+	background-color:#dfdfdf;
+}
+
+.review-btn-delete {
+	box-shadow:inset 0px 0px 0px 0px #f7c5c0;
+	background:linear-gradient(to bottom, #fc8d83 5%, #e4685d 100%);
+	background-color:#fc8d83;
+	border-radius:6px;
+	border:1px solid #d83526;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-size:10px;
+	font-weight:bold;
+	padding:4px 8px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+}
+.review-btn-delete:hover {
+	background:linear-gradient(to bottom, #e4685d 5%, #fc8d83 100%);
+	background-color:#e4685d;
 }

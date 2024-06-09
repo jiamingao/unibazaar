@@ -32,7 +32,7 @@
 }
 
 .profile-dropdown {
-  background-color: #f1641e27;
+  background-color: #f1641eb0;
   position: absolute;
   right: 8px;
   border-radius: 8px;
@@ -136,7 +136,7 @@
 }
 
 .logged-in-container .manage-product-btn{
-  padding: 8px 15px;
+  padding: 6px 10px;
   border-radius: 10px;
   background-color: #F1641E;
   text-decoration: none;

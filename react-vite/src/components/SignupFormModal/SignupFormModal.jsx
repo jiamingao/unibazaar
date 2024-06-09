@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkSignup } from "../../redux/session";
@@ -18,12 +18,12 @@ function SignupFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
-      });
-    }
+    // if (password !== confirmPassword) {
+    //   return setErrors({
+    //     confirmPassword:
+    //       "Confirm Password field must be the same as the Password field",
+    //   });
+    // }
 
     const serverResponse = await dispatch(
       thunkSignup({
@@ -42,14 +42,29 @@ function SignupFormModal() {
     }
   };
 
-  const isSignupDisabled = email.length === 0 || password.length === 0 || username ===0 || firstname===0 || lastname===0;
+  useEffect(() => {
+    const errorObj = {}
+
+    if (!email.length) errorObj.email = "Required";
+    if (!password.length) errorObj.password = "Required";
+    if (!username.length) errorObj.username = "Required";
+    if (!firstname.length) errorObj.firstname = "Required";
+    if (!lastname.length) errorObj.lastname = "Required";
+    if (password !== confirmPassword)  errorObj.confirmPassword="Confirm Password field must be the same as the Password field";
+
+    setErrors(errorObj)
+
+}, [email,password, username, firstname, lastname, confirmPassword])
+
+
+  const isSignupDisabled = email.length === 0 || password.length === 0 || username ===0 || firstname===0 || lastname===0 || confirmPassword.length===0 || password !== confirmPassword;
 
   return (
     <section>
     <div className="signup-container">
       <div className="signup-form-box">
       <form className="signup-form" onSubmit={handleSubmit}>
-      <div className="signup-title">Sign Up</div>{errors.server && <p>{errors.server}</p>}
+      <div className="signup-title">Sign Up</div>{errors.server && <p className='error-msg'>{errors.server}</p>}
 
       <div className="signup-field">
           <input
@@ -59,7 +74,7 @@ function SignupFormModal() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label>Email {errors.email && <p>{errors.email}</p>} </label>
+          <label>Email {errors.email && <p className='error-msg'>{errors.email}</p>} </label>
         </div>
 
         <div className="signup-field">
@@ -69,7 +84,7 @@ function SignupFormModal() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        <label>Username {errors.username && <p>{errors.username}</p>}</label>
+        <label>Username {errors.username && <p className='error-msg'>{errors.username}</p>}</label>
         </div>
 
         <div className="signup-field">
@@ -79,7 +94,7 @@ function SignupFormModal() {
             onChange={(e) => setFirstname(e.target.value)}
             required
           />
-        <label>First Name {errors.firstname && <p>{errors.firstname}</p>}</label>
+        <label>First Name {errors.firstname && <p className='error-msg'>{errors.firstname}</p>}</label>
         </div>
 
         <div className="signup-field">
@@ -89,7 +104,7 @@ function SignupFormModal() {
             onChange={(e) => setLastname(e.target.value)}
             required
           />
-        <label>Last Name {errors.lastname && <p>{errors.lastname}</p>}</label>
+        <label>Last Name {errors.lastname && <p className='error-msg'>{errors.lastname}</p>}</label>
         </div>
 
         <div className="signup-field">
@@ -99,7 +114,7 @@ function SignupFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        <label>Password {errors.password && <p>{errors.password}</p>}</label>
+        <label>Password {errors.password && <p className='error-msg'>{errors.password}</p>}</label>
         </div>
 
         <div className="signup-field">
@@ -109,7 +124,7 @@ function SignupFormModal() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
-        <label>Confirm Password {errors.confirmPassword && <p>{errors.confirmPassword}</p>}</label>
+        <label>Confirm Password {errors.confirmPassword && <p className='error-msg'>{errors.confirmPassword}</p>}</label>
         </div>
 
         <button className="submit-button-signup" type="submit" disabled={isSignupDisabled}>Sign Up</button>

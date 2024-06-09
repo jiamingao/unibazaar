@@ -2,7 +2,8 @@ import { useDispatch } from "react-redux";
 import { createReviewThunk } from "../../redux/review";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useModal } from '../../context/Modal'
+import { useModal } from '../../context/Modal';
+import './CreateReview.css'
 
 const CreateReview=({product, setReviewPosted})=>{
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ return(
         {error.rating && <p className='error-msg'>{error.rating}</p>}
       </div>
 
-      <button type="submit" disabled={!review.length || error.length > 0 || rating < 1}>
+      <button type="submit" className="cr-submit-btn" disabled={!review.length || error.length > 0 || rating < 1}>
         Submit Review
       </button>
 

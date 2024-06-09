@@ -95,8 +95,8 @@ return(
         {error.rating && <p className='error-msg'>{error.rating}</p>}
       </div>
 
-      <button type="submit" disabled={!review.length || error.length > 0 || rating < 1}>
-        Submit Review
+      <button type="submit" className="cr-submit-btn" disabled={!review.length || error.length > 0 || rating < 1}>
+        Update Review
       </button>
 
     </form>

@@ -21,9 +21,17 @@ function LandingPage(){
 
 
   return(
+    <>
+    <div className="head-pic-container">
+    <img src="/head-picture.jpeg" alt='head picture' className="head-pic"/>
+    </div>
     <div className="products">
       {productsArr.length > 0 ? (
       <div className="product-container">
+        <div className="editor">
+          <p>Editors' Picks</p>
+          <p>Shop these unique finds…</p>
+        </div>
         {productsArr.map((product) => (
           <div onClick={()=>navigate(`/products/${product.id}`)} key={product.id} className="product">
             <img src={product.images[0].image_url} alt={product.name} className="product-image" />
@@ -41,6 +49,7 @@ function LandingPage(){
       </div>
     )}
     </div>
+    </>
   )
 }
 

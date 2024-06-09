@@ -83,6 +83,10 @@ input:valid~label {
   font-weight: 600;
 }
 
+.error-msg{
+  color: #d32f2f;
+  font-size: 9px;
+}
 
 @media screen and (max-width: 480px) {
   .signup-form-box {

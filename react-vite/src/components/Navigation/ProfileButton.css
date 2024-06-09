@@ -16,12 +16,12 @@
 }
 
 .profile-logout{
-  color: black;
+  color: white;
   font-size: 13px;
   padding: 4px 4px;
   border-radius: 6px;
   border: none;
-  background-color: #f1641e61;
+  background-color: black;
 }
 
 .profile-logout:hover{

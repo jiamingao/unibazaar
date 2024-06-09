@@ -1,4 +1,17 @@
 
+.head-pic-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.head-pic{
+  width: 95%;
+  bottom: 0px;
+  object-fit: cover;
+  height: 600px;
+}
+
 .product-container{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -6,6 +19,16 @@
   padding: 3rem;
 }
 
+
+.editor{
+  justify-content: center;
+}
+
+.editor p{
+  font-size: 2rem;
+  color: #7d7b7b;
+  font-style:italic;
+}
 
 .product {
   position: relative;

@@ -107,22 +107,39 @@ const handleFileChange = (file, index) => {
   useEffect(() => {
     const errorObj = {}
 
-    if(!name.length) errorObj.name = "Name is Required"
-    if(!price.length) errorObj.price = "Price is Required"
-    if(!description.length) errorObj.description = "Description is Required"
+    // if(!name.length) errorObj.name = "Name is Required"
+    // if(!price.length) errorObj.price = "Price is Required"
+    // if(!description.length) errorObj.description = "Description is Required"
     // if(!image_url) errorObj.description = "Image is Required"
+    if (!name.length) errorObj.name = "Required";
+
+    if (!price.length) {
+        errorObj.price = "Required";
+    } else if (isNaN(price)) {
+        errorObj.price = "Price must be a number";
+    } else if (parseFloat(price) <= 0) {
+        errorObj.price = "Price must be positive";
+    }
+
+    if (!description.length) errorObj.description = "Required";
+    else if (description.length < 10) errorObj.description = "Please write at least 10 characters";
+
     setError(errorObj)
 
 }, [name,price,description])
 
+const isSubmitDisabled = Object.values(error).length > 0
+
   return(
     <div className='update-product-container'>
-    <h1 className='up-title'>Update Your Product</h1>
+      <div className='up-form-box'>
+
       <form className='up-form' onSubmit={handleSubmit}>
-          <div className='up-inputs'>
+      <div className='up-title'>Update Your Product</div>
+
 
             <div className='up-field'>
-            <label className='up-label'>Name:</label>
+            <label className='up-label'>Name:{error.name && <p className='error-msg'>{error.name}</p>}</label>
               <input
               type="text"
               name="name" placeholder='product name'
@@ -130,12 +147,10 @@ const handleFileChange = (file, index) => {
               onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="error-container">
-              {error.name && <p className='error-msg'>{error.name}</p>}
-            </div>
+
 
             <div className='up-field'>
-            <label className='up-label'>Price:</label>
+            <label className='up-label'>Price:{error.price && <p className='error-msg'>{error.price}</p>}</label>
               <input
               type="text"
               name="price" placeholder='product price'
@@ -143,24 +158,20 @@ const handleFileChange = (file, index) => {
               onChange={(e) => setPrice(e.target.value)}
               />
             </div>
-            <div className="error-container">
-              {error.price && <p className='error-msg'>{error.price}</p>}
-            </div>
+
 
             <div className='up-field'>
             <label className='up-label'>
-            <p>Describe Your Product:</p>
+            Describe Your Product:{error.description && <p className='error-msg'>{error.description}</p>}
             </label>
             <textarea
                 name="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Please write at least 30 characters"
+                placeholder="Please write at least 10 characters"
               />
             </div>
-            <div className="error-container">
-              {error.description && <p className='error-msg'>{error.description}</p>}
-            </div>
+
 
             <div className='up-field'>
             <label className='up-label'>Category:</label>
@@ -205,12 +216,13 @@ const handleFileChange = (file, index) => {
             </div>
             </div>
 
-          <div className='up-submit-cancel'>
-          <button className='up-submit-btn' type="submit" onClick={handleSubmit} disabled={Object.values(error).length > 0}>Confirm Updates</button>
+          <div className='button-container'>
+          <button className='up-submit-btn' type="submit" onClick={handleSubmit} disabled={isSubmitDisabled}>Confirm</button>
           <button className='cancel-button' onClick={closeModal}>Cancel</button>
           </div>
-      </div>
+
       </form>
+      </div>
   </div>
   )
 

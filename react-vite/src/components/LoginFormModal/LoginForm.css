@@ -56,13 +56,13 @@ section {
   transition: 0.5s;
 }
 
-/* animations: start */
+
 input:focus~label,
 input:valid~label {
     top: -5px;
 }
 
-/* animation:end */
+
 .login-field input {
     width: 100%;
     height: 50px;
@@ -115,6 +115,11 @@ input:valid~label {
 .login-register-button:hover{
   cursor: pointer;
   color: black;
+}
+
+.error-msg{
+  color: #d32f2f;
+  font-size: 9px;
 }
 
 @media screen and (max-width: 480px) {

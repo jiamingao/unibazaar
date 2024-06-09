@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import { thunkLogin } from "../../redux/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -31,6 +31,18 @@ function LoginFormModal() {
     }
   };
 
+  useEffect(() => {
+    const errorObj = {}
+
+    if (!email.length) errorObj.email = "Required";
+    if (!password.length) errorObj.password = "Required";
+
+    setErrors(errorObj)
+
+}, [email,password])
+
+
+
   const isSubmitDisabled = email.length === 0 || password.length === 0;
 
   return (
@@ -48,7 +60,7 @@ function LoginFormModal() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label>Email {errors.email && <p>{errors.email}</p>}</label>
+          <label>Email {errors.email && <p className='error-msg'>{errors.email}</p>}</label>
         </div>
 
         <div className="login-field">
@@ -58,13 +70,13 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <label>Password {errors.password && <p>{errors.password}</p>}</label>
+          <label>Password {errors.password && <p className='error-msg'>{errors.password}</p>}</label>
         </div>
 
         <button className="submit-button-login" type="submit" disabled={isSubmitDisabled}>Log In</button>
 
         <div className="register">
-          <p>Don't have an account?
+          <p>Don&apos;t have an account?
           <OpenModalButton
                 buttonText="register"
                 modalComponent={<SignupFormModal />}

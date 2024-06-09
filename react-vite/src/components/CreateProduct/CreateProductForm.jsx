@@ -77,13 +77,18 @@ const CreateProduct=()=>{
     }
 
     if (!description.length) errorObj.description = "Required";
-    else if (description.length < 30) errorObj.description = "Please write at least 30 characters";
+    else if (description.length < 10) errorObj.description = "Please write at least 10 characters";
 
     if (!imageUrls[0]) errorObj.imageUrls = "Please upload at least one picture to Image 1";
 
     setError(errorObj)
 
 }, [name,price,description,imageUrls])
+
+const handleCancel = () => {
+  navigate('/products/current');
+};
+
 
 
   return(
@@ -119,7 +124,7 @@ const CreateProduct=()=>{
                 name="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Please write at least 30 characters"
+                placeholder="Please write at least 10 characters"
               />
             </div>
 
@@ -163,8 +168,10 @@ const CreateProduct=()=>{
                 </div>
               ))}
               </div>
-
+          <div className='button-container'>
           <button type="submit" disabled={Object.values(error).length > 0} className='cp-submit-btn'>Submit</button>
+          <button className='cancel-button' onClick={handleCancel}>Cancel</button>
+          </div>
 
       </form>
       </div>
