@@ -19,6 +19,7 @@ class Product(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = db.relationship('User', back_populates='products')
+    cart_item = db.relationship('CartItem', back_populates='product')
 
     product_images = db.relationship('ProductImage', back_populates='product',cascade='all, delete-orphan')
     reviews = db.relationship('Review', back_populates='product',cascade='all, delete-orphan')
