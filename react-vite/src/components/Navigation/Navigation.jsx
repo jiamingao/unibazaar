@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { thunkLogin } from '../../redux/session';
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegHeart } from "react-icons/fa";
+import Cart from "../Cart/Cart";
+import { useState, useEffect } from 'react';
+import { FaArrowRight } from "react-icons/fa";
 
 
 function Navigation() {
@@ -18,10 +21,13 @@ function Navigation() {
   const navigate = useNavigate()
   const currUser = useSelector(state => state.session.user)
 
-  const cartIcon = (e) => {
-    e.preventDefault();
-    alert("Feature coming soon");
-  };
+  const [showCart, setShowCart] = useState(false);
+  const cartOrder = useSelector((state) => state.cart.order);
+
+  useEffect(() => {
+    if (cartOrder.length) setShowCart(true);
+  }, [cartOrder]);
+
 
   const heartIcon = (e) => {
     e.preventDefault();
@@ -78,7 +84,24 @@ function Navigation() {
             />
         </div>
     )}
-    <div className="shoping-cart"><LuShoppingCart className="cart-icon" onClick={cartIcon} size={30} /></div>
+    <div className="shoping-cart">
+      <button className="checkout-button" onClick={() => setShowCart(true)} aria-label="Open cart">
+      <LuShoppingCart className="cart-icon"  />
+          Cart
+        </button>
+      </div>
+
+      <div
+        className="sidebar"
+        style={showCart ? { transform: 'translateX(0)' } : { transform: 'translateX(100%)' }}
+      >
+        <div className="sidebar-header">
+          <FaArrowRight onClick={() => setShowCart(false)} aria-label="Close cart" />
+        </div>
+
+        <Cart />
+      </div>
+
     </div>
 </div>
   );

@@ -11,7 +11,8 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import UpdateReview from "../UpdateReview/UpdateReview";
 import DeleteReview from "../DeleteReview/DeleteReview";
 import { FaHeart, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
+// import { CiEdit } from "react-icons/ci";
+import { addItemThunk } from '../../redux/cart';
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
@@ -35,6 +36,11 @@ const ProductDetails=()=>{
 
   const product = products[productId]
   // console.log(product)
+
+  const addToCart = () => {
+    dispatch(addItemThunk(product.id));
+  };
+
 
   const reviewsTotalObj = useSelector(state=>state.reviews.allReviews)
   const reviewsObj = reviewsTotalObj.reviews
@@ -77,10 +83,6 @@ const buyBtn = (e) => {
     alert("Feature coming soon");
 };
 
-const addCartBtn = (e) => {
-  e.preventDefault();
-  alert("Feature coming soon");
-};
 
 const addFavBtn = (e) => {
   e.preventDefault();
@@ -138,7 +140,7 @@ return(
 
         <div className="btn-container">
         <button className='buy-btn' onClick={buyBtn}>Buy it now</button>
-        <button className='add-cart-btn' onClick={addCartBtn}>Add to cart</button>
+        <button className='add-cart-btn' onClick={addToCart}>Add to cart</button>
         <button className='add-fav-btn' onClick={addFavBtn}><FaHeart color="#B50330" />Add to collection</button>
         </div>
 
