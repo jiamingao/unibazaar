@@ -6,6 +6,12 @@ const UPDATE_COUNT = 'cart/UPDATE_COUNT';
 const RESET = 'cart/RESET';
 
 //action creators
+export const reset = () => {
+  return {
+    type: RESET
+  };
+};
+
 const addItem = (item) => {
   return {
     type: ADD_ITEM,
@@ -150,6 +156,8 @@ function cartReducer(state=initialState, action){
       return newState
 
     }
+    case RESET:
+      return initialState;
     default:
       return state;
   }

@@ -9,13 +9,10 @@ class CartItem(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')),nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('products.id')),nullable=False)
     quantity = db.Column(db.Integer, default=1)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
-
-    user = db.relationship('User', back_populates='cart_items')
 
     product = db.relationship('Product', back_populates='cart_item')
 
@@ -23,7 +20,6 @@ class CartItem(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
             'product_id': self.product_id,
             'quantity': self.quantity,
             'created_at':self.created_at,

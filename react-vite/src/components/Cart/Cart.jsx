@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import CartItem from './cartItem';
-// import './Cart.css';
+// import { reset } from '../../redux/cart';
+import { removeItemThunk } from '../../redux/cart';
+import './Cart.css';
 
 function Cart() {
   const dispatch = useDispatch();
@@ -15,14 +17,26 @@ function Cart() {
     </div>
   );
 
-//   const onSubmit = (e) => {
-//     e.preventDefault();
-//     window.alert(
-//       "Purchased the following:\n" +
-//       `${cartItems.map(item => `${item.count} of ${item.name}`).join('\n')}`
-//     );
-//     dispatch(reset());
-//   }
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   window.alert(
+  //     "Purchased the following:\n" +
+  //     `${cartItems.map(item => `${item.quantity} of ${item.product.name}`).join('\n')}`
+  //   );
+  //   dispatch(reset());
+  // }
+
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    window.alert(
+      "Purchased the following:\n" +
+      `${cartItems.map(item => `${item.quantity} of ${item.product.name}`).join('\n')}`
+    );
+    cartItems.map(item=>(dispatch(removeItemThunk(item.id))))
+
+  }
+
 
   return (
     <div className="cart">
@@ -30,13 +44,11 @@ function Cart() {
         {cartItems.map(item => <CartItem key={item.id} item={item}/>)}
       </ul>
       <hr />
-      {/* <form onSubmit={onSubmit}> */}
+      <form onSubmit={onSubmit}>
         <button type="submit">Checkout</button>
-      {/* </form> */}
+      </form>
     </div>
   )
 }
-
-
 
 export default Cart;

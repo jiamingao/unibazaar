@@ -12,14 +12,13 @@ def add_to_cart():
     quantity = request.json.get('quantity',1)
     print("Received quantity:", quantity)
 
-    item = CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    item = CartItem.query.filter_by( product_id=product_id).first()
     if item:
         print("Old quantity:", item.quantity)
         item.quantity += quantity
         print("New quantity:", item.quantity)
     else:
       item = CartItem(
-        user_id = current_user.id,
         product_id=product_id,
         quantity=quantity)
       db.session.add(item)
@@ -39,7 +38,7 @@ def view_cart():
 @cart_item_routes.route('/<int:itemId>/edit', methods=["PUT"])
 def edit_quantity(itemId):
     # item_to_update = CartItem.query.get(cartId)
-    item_to_update = CartItem.query.filter_by(id=itemId, user_id=current_user.id).first()
+    item_to_update = CartItem.query.filter_by(id=itemId).first()
     new_quantity =  request.json.get('quantity')
     item_to_update.quantity = new_quantity
     db.session.commit()
@@ -50,7 +49,7 @@ def edit_quantity(itemId):
 #remove cart item
 @cart_item_routes.route('/<int:itemId>/delete', methods=["DELETE"])
 def delete_item(itemId):
-   item_to_delete = CartItem.query.filter_by(id=itemId, user_id=current_user.id).first()
+   item_to_delete = CartItem.query.filter_by(id=itemId).first()
    if not item_to_delete:
       return jsonify({"error": "Product not found"}),404
    db.session.delete(item_to_delete)
