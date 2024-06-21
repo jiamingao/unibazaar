@@ -35,11 +35,8 @@ const ProductDetails=()=>{
   // console.log(products)
 
   const product = products[productId]
-  // console.log(product)
+  // console.log("line 38 the product",product)
 
-  const addToCart = () => {
-    dispatch(addItemThunk(product.id));
-  };
 
 
   const reviewsTotalObj = useSelector(state=>state.reviews.allReviews)
@@ -68,10 +65,21 @@ function isProductOwner(productOwnerId) {
     }
 }
 
+
+
+const addToCart = () => {
+
+    dispatch(addItemThunk(product.id));
+
+
+};
+
+
 function formatDate(date) {
   const parsedDate = new Date(date);
   const options = {
     month: 'long',
+    day: 'numeric',
     year: 'numeric'
   };
   const dateFormatter = new Intl.DateTimeFormat('default', options);
@@ -139,8 +147,8 @@ return(
         </div>
 
         <div className="btn-container">
-        <button className='buy-btn' onClick={buyBtn}>Buy it now</button>
-        <button className='add-cart-btn' onClick={addToCart}>Add to cart</button>
+        <button className='buy-btn' onClick={buyBtn} disabled={isProductOwner(product.user_id)}>Buy it now</button>
+        <button className='add-cart-btn' onClick={addToCart} disabled={isProductOwner(product.user_id)}>Add to cart</button>
         <button className='add-fav-btn' onClick={addFavBtn}><FaHeart color="#B50330" />Add to collection</button>
         </div>
 

@@ -133,6 +133,12 @@
 
 }
 
+.buy-btn:disabled, .add-cart-btn:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
 .add-fav-btn{
   padding: 10px 20px;
   border: 1px transparent;
