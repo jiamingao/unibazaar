@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { thunkLogin } from '../../redux/session';
 import { LuShoppingCart } from "react-icons/lu";
 import { FaRegHeart } from "react-icons/fa";
+import Cart from "../Cart/Cart";
+import { useState, useEffect } from 'react';
+import { FaArrowRight } from "react-icons/fa";
 
 
 function Navigation() {
@@ -18,10 +21,13 @@ function Navigation() {
   const navigate = useNavigate()
   const currUser = useSelector(state => state.session.user)
 
-  const cartIcon = (e) => {
-    e.preventDefault();
-    alert("Feature coming soon");
-  };
+  const [showCart, setShowCart] = useState(false);
+  const cartOrder = useSelector((state) => state.cart.order);
+
+  useEffect(() => {
+    if (cartOrder.length) setShowCart(true);
+  }, [cartOrder]);
+
 
   const heartIcon = (e) => {
     e.preventDefault();
@@ -38,7 +44,7 @@ function Navigation() {
       <h2 className="nav-title">UniBazaar</h2>
       </NavLink>
       </div>
-      <div className="searchBar" > <IoSearchCircle className="search-button" size={35} /> <input className='search-input' placeholder="Search for anthing" type="search"/> </div>
+      <div className="searchBar" > <IoSearchCircle className="search-button" size={35} /> <input className='search-input' placeholder="Search for anything" type="search"/> </div>
       <div className="nav-right-part">
     {currUser ? (
       <div className="logged-in-container">
@@ -78,7 +84,25 @@ function Navigation() {
             />
         </div>
     )}
-    <div className="shoping-cart"><LuShoppingCart className="cart-icon" onClick={cartIcon} size={30} /></div>
+    <div className="shoping-cart">
+      <button className="cart-button" onClick={() => setShowCart(true)} aria-label="Open cart">
+      <LuShoppingCart size={20} className="cart-icon"  />
+          <div>Cart</div>
+        </button>
+      </div>
+
+      <div
+        className="sidebar"
+        style={showCart ? { transform: 'translateX(0)' } : { transform: 'translateX(100%)' }}
+      >
+        <div className="sidebar-header">
+          <FaArrowRight size={25} onClick={() => setShowCart(false)} aria-label="Close cart" />
+
+        </div>
+
+        <Cart />
+      </div>
+
     </div>
 </div>
   );

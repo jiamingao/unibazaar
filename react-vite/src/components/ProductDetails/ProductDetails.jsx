@@ -11,7 +11,8 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import UpdateReview from "../UpdateReview/UpdateReview";
 import DeleteReview from "../DeleteReview/DeleteReview";
 import { FaHeart, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
+// import { CiEdit } from "react-icons/ci";
+import { addItemThunk } from '../../redux/cart';
 
 const ProductDetails=()=>{
   const dispatch = useDispatch();
@@ -34,7 +35,9 @@ const ProductDetails=()=>{
   // console.log(products)
 
   const product = products[productId]
-  // console.log(product)
+  // console.log("line 38 the product",product)
+
+
 
   const reviewsTotalObj = useSelector(state=>state.reviews.allReviews)
   const reviewsObj = reviewsTotalObj.reviews
@@ -62,10 +65,21 @@ function isProductOwner(productOwnerId) {
     }
 }
 
+
+
+const addToCart = () => {
+
+    dispatch(addItemThunk(product.id));
+
+
+};
+
+
 function formatDate(date) {
   const parsedDate = new Date(date);
   const options = {
     month: 'long',
+    day: 'numeric',
     year: 'numeric'
   };
   const dateFormatter = new Intl.DateTimeFormat('default', options);
@@ -77,10 +91,6 @@ const buyBtn = (e) => {
     alert("Feature coming soon");
 };
 
-const addCartBtn = (e) => {
-  e.preventDefault();
-  alert("Feature coming soon");
-};
 
 const addFavBtn = (e) => {
   e.preventDefault();
@@ -137,8 +147,8 @@ return(
         </div>
 
         <div className="btn-container">
-        <button className='buy-btn' onClick={buyBtn}>Buy it now</button>
-        <button className='add-cart-btn' onClick={addCartBtn}>Add to cart</button>
+        <button className='buy-btn' onClick={buyBtn} disabled={isProductOwner(product.user_id)}>Buy it now</button>
+        <button className='add-cart-btn' onClick={addToCart} disabled={isProductOwner(product.user_id)}>Add to cart</button>
         <button className='add-fav-btn' onClick={addFavBtn}><FaHeart color="#B50330" />Add to collection</button>
         </div>
 
