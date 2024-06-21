@@ -140,10 +140,26 @@ function cartReducer(state=initialState, action){
 
       return newState;
     }
-    case UPDATE_COUNT:{
-      newState = {...state};
-      newState.items[action.payload.id]=action.payload;
-      return newState
+    case UPDATE_COUNT: {
+      // console.log('Current state before update:', state);
+      const { id } = action.payload;
+      const updatedItem = {
+        ...state.items[id],
+        ...action.payload
+      };
+
+      const updatedItems = {
+        ...state.items,
+        [id]: updatedItem
+      };
+
+      newState = {
+        ...state,
+        items: updatedItems
+      };
+
+      // console.log('New state after update:', newState);
+      return newState;
     }
     case REMOVE_ITEM:{
       // console.log('Current state before deletion:', state);

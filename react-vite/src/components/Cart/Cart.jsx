@@ -13,9 +13,13 @@ function Cart() {
 
   if (!cartItems || !cartItems.length) return (
     <div className="cart">
-      No items in the cart. Start selecting items to purchase.
+      Your cart is empty. Discover something unique to fill it up.
     </div>
   );
+
+  const totalPrice = cartItems.reduce((acc, item) => {
+    return acc + (item.quantity * item.product.price);
+  }, 0);
 
   // const onSubmit = (e) => {
   //   e.preventDefault();
@@ -43,9 +47,12 @@ function Cart() {
       <ul>
         {cartItems.map(item => <CartItem key={item.id} item={item}/>)}
       </ul>
-      <hr />
+      <hr className='cart-line' />
+      <div>
+      Total: ${totalPrice.toFixed(2)}
+      </div>
       <form onSubmit={onSubmit}>
-        <button type="submit">Checkout</button>
+        <button className='cart-checkout-btn' type="submit">Checkout</button>
       </form>
     </div>
   )

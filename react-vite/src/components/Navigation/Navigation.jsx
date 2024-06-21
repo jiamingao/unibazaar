@@ -44,7 +44,7 @@ function Navigation() {
       <h2 className="nav-title">UniBazaar</h2>
       </NavLink>
       </div>
-      <div className="searchBar" > <IoSearchCircle className="search-button" size={35} /> <input className='search-input' placeholder="Search for anthing" type="search"/> </div>
+      <div className="searchBar" > <IoSearchCircle className="search-button" size={35} /> <input className='search-input' placeholder="Search for anything" type="search"/> </div>
       <div className="nav-right-part">
     {currUser ? (
       <div className="logged-in-container">
@@ -85,9 +85,9 @@ function Navigation() {
         </div>
     )}
     <div className="shoping-cart">
-      <button className="checkout-button" onClick={() => setShowCart(true)} aria-label="Open cart">
-      <LuShoppingCart className="cart-icon"  />
-          Cart
+      <button className="cart-button" onClick={() => setShowCart(true)} aria-label="Open cart">
+      <LuShoppingCart size={20} className="cart-icon"  />
+          <div>Cart</div>
         </button>
       </div>
 
@@ -96,7 +96,8 @@ function Navigation() {
         style={showCart ? { transform: 'translateX(0)' } : { transform: 'translateX(100%)' }}
       >
         <div className="sidebar-header">
-          <FaArrowRight onClick={() => setShowCart(false)} aria-label="Close cart" />
+          <FaArrowRight size={25} onClick={() => setShowCart(false)} aria-label="Close cart" />
+
         </div>
 
         <Cart />
