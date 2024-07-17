@@ -2,8 +2,7 @@
 
 Unibazaar is a full-stack e-commerce web application using Python/Flask and React, integrating Redux for state management to create a seamless and dynamic shopping experience.
 
-https://github.com/jiamingao/unibazaar/blob/main/Screen%20Recording%201.gif
-
+![main](https://github.com/jiamingao/unibazaar/blob/main/Screen%20Recording%201.gif)
 
 ## Live Link
 https://unibazaar.onrender.com/
