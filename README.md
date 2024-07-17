@@ -31,3 +31,9 @@ https://unibazaar.onrender.com/
 
 ### Hosting
 ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+
+## Wiki Index
+[Feature List](https://github.com/jiamingao/unibazaar/wiki/Feature-List) | 
+[Database Schema](https://github.com/jiamingao/unibazaar/wiki/Database-Schema) | 
+[User Stories](https://github.com/jiamingao/unibazaar/wiki/User-Stories) | 
+[Webpage Wireframes](https://github.com/jiamingao/unibazaar/wiki/Wireframes)
